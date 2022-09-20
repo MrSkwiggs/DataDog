@@ -10,25 +10,52 @@ import Combine
 
 extension Metrics {
     class ViewModel: ObservableObject {
-        private let cpuLoadProvider: CPULoadProvider
+        private let cpuLoadProvider: any MetricProvider
+        private let memoryLoadProvider: any MetricProvider
+        private let batteryStateProvider: any MetricProvider
         
         private var subscriptions: [AnyCancellable] = []
         
-        init(cpuLoadProvider: CPULoadProvider) {
-            self.cpuLoadProvider = cpuLoadProvider
-            
-            setupSubscriptions()
-        }
+        init<CPULoadProvider: MetricProvider,
+             MemoryLoadProvider: MetricProvider,
+             BatteryStateProvider: MetricProvider>(
+                cpuLoadProvider: CPULoadProvider,
+                memoryLoadProvider: MemoryLoadProvider,
+                batteryStateProvider: BatteryStateProvider) {
+                    self.cpuLoadProvider = cpuLoadProvider
+                    self.memoryLoadProvider = memoryLoadProvider
+                    self.batteryStateProvider = batteryStateProvider
+                    
+                    setupSubscriptions()
+                }
         
         private func setupSubscriptions() {
             cpuLoadProvider
-                .cpuLoadPublisher
+                .publisher
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.cpuLoad, on: self)
+                .store(in: &subscriptions)
+            
+            memoryLoadProvider
+                .publisher
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.memoryLoad, on: self)
+                .store(in: &subscriptions)
+            
+            batteryStateProvider
+                .publisher
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.batteryState, on: self)
                 .store(in: &subscriptions)
         }
         
         @Published
         var cpuLoad: Double = 0
+        
+        @Published
+        var memoryLoad: Double = 0
+        
+        @Published
+        var batteryState: Double = 0
     }
 }
