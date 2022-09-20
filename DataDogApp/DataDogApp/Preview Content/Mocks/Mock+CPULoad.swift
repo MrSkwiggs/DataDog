@@ -43,7 +43,7 @@ extension Mock {
         
         // MARK: CPULoadProviderConfigurator Conformance
         
-        lazy var cpuLoadPublisher: AnyPublisher<Double, Never> = { cpuLoadSubject.eraseToAnyPublisher() }()
+        lazy var publisher: AnyPublisher<Double, Never> = { cpuLoadSubject.eraseToAnyPublisher() }()
         
         func set(refreshFrequency: Int) {
             self.refreshFrequency = refreshFrequency
