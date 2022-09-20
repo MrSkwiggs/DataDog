@@ -17,6 +17,7 @@
 		8D07720B28DA356B0022433F /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D07720A28DA356B0022433F /* Metrics.swift */; };
 		8D07720D28DA35710022433F /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D07720C28DA35710022433F /* Events.swift */; };
 		8D07721028DA35980022433F /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 8D07720F28DA35980022433F /* SFSafeSymbols */; };
+		8D0D143628DA44540075E192 /* MetricProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0D143528DA44540075E192 /* MetricProvider.swift */; };
 		8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */; };
 		8DA6ECCC28DA3A170014C59C /* CPULoadProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCB28DA3A170014C59C /* CPULoadProvider.swift */; };
 		8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCE28DA3AA10014C59C /* Mock.swift */; };
@@ -53,6 +54,7 @@
 		8D0771F728DA32210022433F /* DataDogWatchAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDogWatchAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8D07720A28DA356B0022433F /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		8D07720C28DA35710022433F /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
+		8D0D143528DA44540075E192 /* MetricProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricProvider.swift; sourceTree = "<group>"; };
 		8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+ViewModel.swift"; sourceTree = "<group>"; };
 		8DA6ECC928DA399F0014C59C /* Watcher */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Watcher; path = ../Watcher; sourceTree = "<group>"; };
 		8DA6ECCB28DA3A170014C59C /* CPULoadProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPULoadProvider.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				8DA6ECCB28DA3A170014C59C /* CPULoadProvider.swift */,
+				8D0D143528DA44540075E192 /* MetricProvider.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				8D07720D28DA35710022433F /* Events.swift in Sources */,
 				8DA6ECCC28DA3A170014C59C /* CPULoadProvider.swift in Sources */,
 				8DA6ECD128DA3AB60014C59C /* Mock+CPULoad.swift in Sources */,
+				8D0D143628DA44540075E192 /* MetricProvider.swift in Sources */,
 				8D0771DD28DA321F0022433F /* ContentView.swift in Sources */,
 				8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */,
 				8D07720B28DA356B0022433F /* Metrics.swift in Sources */,
