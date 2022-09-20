@@ -14,22 +14,37 @@ struct Metrics: View {
     @StateObject
     var viewModel: ViewModel
     
-    var body: some View {
-        
-        Gauge(value: viewModel.cpuLoad, label: {
-            Text("CPU")
+    fileprivate func gauge(value: Double, title: String) -> some View {
+        return Gauge(value: value, label: {
+            Text(title)
         }, currentValueLabel: {
-            Text("\(viewModel.cpuLoad * 100)%")
+            Text("\(value * 100, specifier: "%.1f")%")
         })
-        .scaleEffect(1.5)
         .gaugeStyle(.accessoryCircular)
         .tint(gradient)
-        .animation(.default, value: viewModel.cpuLoad)
+    }
+    
+    var body: some View {
+        List {
+            Group {
+                gauge(value: viewModel.cpuLoad, title: "CPU")
+                    .animation(.default, value: viewModel.cpuLoad)
+                gauge(value: viewModel.memoryLoad, title: "MEM")
+                    .animation(.default, value: viewModel.memoryLoad)
+                gauge(value: viewModel.batteryState, title: "BATT")
+                    .animation(.default, value: viewModel.batteryState)
+            }
+            .padding()
+        }
     }
 }
 
 struct Metrics_Previews: PreviewProvider {
+    static let metricsViewModel: Metrics.ViewModel =
+        .init(cpuLoadProvider: Mock.CPULoadProvider(),
+              memoryLoadProvider: Mock.CPULoadProvider(refreshFrequency: 3),
+              batteryStateProvider: Mock.CPULoadProvider(refreshFrequency: 5))
     static var previews: some View {
-        Metrics(viewModel: .init(cpuLoadProvider: Mock.CPULoadProvider()))
+        Metrics(viewModel: metricsViewModel)
     }
 }
