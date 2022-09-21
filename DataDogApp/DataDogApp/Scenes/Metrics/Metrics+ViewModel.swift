@@ -7,9 +7,13 @@
 
 import Foundation
 import Combine
+import Watcher
 
 extension Metrics {
     class ViewModel: ObservableObject {
+        
+        typealias MetricProvider = MetricProviderUseCase
+        
         private let cpuLoadProvider: any MetricProvider
         private let memoryLoadProvider: any MetricProvider
         private let batteryStateProvider: any MetricProvider
@@ -50,12 +54,12 @@ extension Metrics {
         }
         
         @Published
-        var cpuLoad: Double = 0
+        var cpuLoad: Float = 0
         
         @Published
-        var memoryLoad: Double = 0
+        var memoryLoad: Float = 0
         
         @Published
-        var batteryState: Double = 0
+        var batteryState: Float = 0
     }
 }

@@ -7,18 +7,19 @@
 
 import Foundation
 import Combine
+import Watcher
 
 extension Mock {
-    class CPULoadProvider: CPULoadProviderConfigurator {
+    class CPULoadProvider: CPULoadConfiguratorUseCase {
         
         // MARK: Private
         
-        private var refreshFrequency: Int = 1 {
+        private var refreshFrequency: Float = 1 {
             didSet {
                 updateTimer()
             }
         }
-        private let cpuLoadSubject: CurrentValueSubject<Double, Never> = .init(0)
+        private let cpuLoadSubject: CurrentValueSubject<Float, Never> = .init(0)
         
         private var timer: Timer?
         
@@ -30,27 +31,46 @@ extension Mock {
         private func makeAndScheduleTimer() -> Timer {
             Timer.scheduledTimer(withTimeInterval: Double(refreshFrequency), repeats: true, block: { [weak self] timer in
                 guard let self else { return }
-                self.cpuLoadSubject.send(.random(in: 0.0...1.0))
+                let randomInt = Int.random(in: 0...30)
+                
+                let delta: Float
+                // 2 chances in 20 to have a "spike" in load
+                if randomInt == 0 || randomInt == 1 {
+                    delta = .random(in: 0.25...0.75)
+                } else {
+                    delta = .random(in: 0.0...0.2)
+                }
+                
+                let sign: Float
+                // decide if delta is positive or negative
+                if .random() {
+                    sign = 1.0
+                } else {
+                    sign = -1.0
+                }
+                
+                let newValue = self.cpuLoadSubject.value + (delta * sign)
+                self.cpuLoadSubject.send((0.0...1.0).clamping(newValue))
             })
         }
         
         // MARK: Public
         
-        init(refreshFrequency: Int = 1) {
+        init(refreshFrequency: Float = 1) {
             self.refreshFrequency = refreshFrequency
             self.timer = makeAndScheduleTimer()
         }
         
         // MARK: CPULoadProviderConfigurator Conformance
         
-        lazy var publisher: AnyPublisher<Double, Never> = { cpuLoadSubject.eraseToAnyPublisher() }()
+        lazy var publisher: AnyPublisher<Float, Never> = { cpuLoadSubject.eraseToAnyPublisher() }()
         
-        func set(refreshFrequency: Int) {
+        func set(refreshFrequency: Float) {
             self.refreshFrequency = refreshFrequency
         }
         
         /// Used for mock purposes; sends the given value directly to the publisher
-        func send(cpuLoad: Double) {
+        func send(cpuLoad: Float) {
             cpuLoadSubject.send(cpuLoad)
         }
         
@@ -64,7 +84,7 @@ extension Mock {
         /// Used for mock purposes; resumes the scheduled publisher updates, if applicable
         func resumeUpdates() {
             guard timer == nil else { return }
-            
+            self.timer = makeAndScheduleTimer()
         }
     }
 }

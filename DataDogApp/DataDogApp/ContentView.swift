@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import Watcher
 import SFSafeSymbols
 
 struct ContentView: View {
     
     let metricsViewModel: Metrics.ViewModel =
-        .init(cpuLoadProvider: Mock.CPULoadProvider(),
+        .init(cpuLoadProvider: CPULoadProvider(refreshFrequency: 0.5, queue: .global(qos: .background)),
               memoryLoadProvider: Mock.CPULoadProvider(refreshFrequency: 3),
               batteryStateProvider: Mock.CPULoadProvider(refreshFrequency: 5))
     

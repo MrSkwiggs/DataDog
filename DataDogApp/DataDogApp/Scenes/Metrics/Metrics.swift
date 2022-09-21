@@ -14,7 +14,7 @@ struct Metrics: View {
     @StateObject
     var viewModel: ViewModel
     
-    fileprivate func gauge(value: Double, title: String) -> some View {
+    fileprivate func gauge(value: Float, title: String) -> some View {
         return Gauge(value: value, label: {
             Text(title)
         }, currentValueLabel: {
