@@ -17,7 +17,7 @@ public class Watcher {
 private extension Watcher {
     static func `default`(refreshFrequency: Float) -> Watcher {
         let cpuLoadQueue = DispatchQueue(label: "cpu-load",
-                                         qos: .background, attributes: .initiallyInactive, autoreleaseFrequency: .workItem)
+                                         qos: .background)
         return .init(cpuLoadWatcher: CPULoadProvider(refreshFrequency: refreshFrequency, queue: cpuLoadQueue))
     }
 }

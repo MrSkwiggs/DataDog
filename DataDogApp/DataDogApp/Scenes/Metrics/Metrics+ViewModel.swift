@@ -14,16 +14,15 @@ extension Metrics {
         
         typealias MetricProvider = MetricProviderUseCase
         
-        private let cpuLoadProvider: any MetricProvider
+        private let cpuLoadProvider: CPULoadProviderUseCase
         private let memoryLoadProvider: any MetricProvider
         private let batteryStateProvider: any MetricProvider
         
         private var subscriptions: [AnyCancellable] = []
         
-        init<CPULoadProvider: MetricProvider,
-             MemoryLoadProvider: MetricProvider,
+        init<MemoryLoadProvider: MetricProvider,
              BatteryStateProvider: MetricProvider>(
-                cpuLoadProvider: CPULoadProvider,
+                cpuLoadProvider: CPULoadProviderUseCase,
                 memoryLoadProvider: MemoryLoadProvider,
                 batteryStateProvider: BatteryStateProvider) {
                     self.cpuLoadProvider = cpuLoadProvider
@@ -51,10 +50,23 @@ extension Metrics {
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.batteryState, on: self)
                 .store(in: &subscriptions)
+            
+            cpuLoadProvider
+                .thresholdEventPublisher
+                .receive(on: DispatchQueue.main)
+                .map(\.isExceeding)
+                .assign(to: \.cpuLoadExceededThreshold, on: self)
+                .store(in: &subscriptions)
         }
         
         @Published
         var cpuLoad: Float = 0
+        
+        @Published
+        var cpuLoadThreshold: Float = 0.25
+        
+        @Published
+        var cpuLoadExceededThreshold: Bool = false
         
         @Published
         var memoryLoad: Float = 0

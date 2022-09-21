@@ -20,12 +20,24 @@ extension Mock {
             }
         }
         private let cpuLoadSubject: CurrentValueSubject<Float, Never> = .init(0)
+        private let thresholdEventSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal)
         
+        private var thresholdRange: MetricThresholdRange = .lower
         private var timer: Timer?
         
         private func updateTimer() {
             timer?.invalidate()
             timer = makeAndScheduleTimer()
+        }
+        
+        private func computeThresholdState() {
+            let metric = cpuLoadSubject.value
+            
+            let thresholdEvent = thresholdRange.mapToState(metric, threshold: threshold)
+            
+            guard thresholdEvent != thresholdEventSubject.value else { return }
+            
+            thresholdEventSubject.send(thresholdEvent)
         }
         
         private func makeAndScheduleTimer() -> Timer {
@@ -51,6 +63,7 @@ extension Mock {
                 
                 let newValue = self.cpuLoadSubject.value + (delta * sign)
                 self.cpuLoadSubject.send((0.0...1.0).clamping(newValue))
+                self.computeThresholdState()
             })
         }
         
@@ -64,6 +77,8 @@ extension Mock {
         // MARK: CPULoadProviderConfigurator Conformance
         
         lazy var publisher: AnyPublisher<Float, Never> = { cpuLoadSubject.eraseToAnyPublisher() }()
+        lazy var thresholdEventPublisher: AnyPublisher<MetricThresholdState, Never> = { thresholdEventSubject.eraseToAnyPublisher() }()
+        private(set) var threshold: Float = 1.0
         
         func set(refreshFrequency: Float) {
             self.refreshFrequency = refreshFrequency
@@ -72,6 +87,13 @@ extension Mock {
         /// Used for mock purposes; sends the given value directly to the publisher
         func send(cpuLoad: Float) {
             cpuLoadSubject.send(cpuLoad)
+        }
+        
+        public func set(threshold: Float, range: MetricThresholdRange) {
+            self.threshold = (0.0...1.0).clamping(threshold)
+            self.thresholdRange = range
+            
+            computeThresholdState()
         }
         
         /// Used for mock purposes; interrupts the scheduled publisher updates, if applicable

@@ -11,8 +11,9 @@ import Combine
 /**
  A low-level helper that retrieves CPU & thread load.
  
- - [Credits VenoMKO](https://stackoverflow.com/a/6795612/1033581)
- - [Credits Matt Gallagher](https://github.com/mattgallagher/CwlUtils/blob/master/Sources/CwlUtils/CwlSysctl.swift)
+ - Note: Base implementation [Credits VenoMKO](https://stackoverflow.com/a/6795612/1033581)
+ - Note: `sysctl` usage [Credits Matt Gallagher](https://github.com/mattgallagher/CwlUtils/blob/master/Sources/CwlUtils/CwlSysctl.swift)
+ - Note: `vm_deallocate` [Credits rsfinn](https://stackoverflow.com/a/48630296/1033581)
  */
 class CPULoadWatcher {
     private var cpuInfo: processor_info_array_t!
@@ -34,7 +35,7 @@ class CPULoadWatcher {
         }
     }
     
-    func fetchCPULoad() -> Float {
+    func fetchCPULoad() throws -> Float {
         var loads: [Float] = []
         
         var numCPUsU: natural_t = 0
@@ -66,7 +67,6 @@ class CPULoadWatcher {
                 }
                 
                 loads.append(Float(inUse) / Float(total))
-                print(String(format: "Core: %u Usage: %f", i, Float(inUse) / Float(total)))
             }
             CPUUsageLock.unlock()
             
@@ -82,8 +82,22 @@ class CPULoadWatcher {
             cpuInfo = nil
             numCpuInfo = 0
         } else {
-            print("Error!")
+            throw Error.kernelReturnError
         }
         return loads.reduce(Float(0), +) / Float(loads.count)
+    }
+}
+
+extension CPULoadWatcher {
+    enum Error: Swift.Error, CustomDebugStringConvertible {
+        /// Something went wrong trying to access the host processor info
+        case kernelReturnError
+        
+        var debugDescription: String {
+            switch self {
+            case .kernelReturnError:
+                return "Something went wrong trying to access the host processor info"
+            }
+        }
     }
 }

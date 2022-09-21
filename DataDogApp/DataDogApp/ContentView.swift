@@ -11,8 +11,10 @@ import SFSafeSymbols
 
 struct ContentView: View {
     
+    static let watcher: Watcher = .configure(refreshFrequency: 1)
+    
     let metricsViewModel: Metrics.ViewModel =
-        .init(cpuLoadProvider: CPULoadProvider(refreshFrequency: 0.5, queue: .global(qos: .background)),
+        .init(cpuLoadProvider: ContentView.watcher.cpuLoadWatcher,
               memoryLoadProvider: Mock.CPULoadProvider(refreshFrequency: 3),
               batteryStateProvider: Mock.CPULoadProvider(refreshFrequency: 5))
     
@@ -27,7 +29,9 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemSymbol: .listDash)
                 }
-            
+        }
+        .onAppear {
+            ContentView.watcher.cpuLoadWatcher.set(threshold: 0.25, range: .lower)
         }
     }
 }

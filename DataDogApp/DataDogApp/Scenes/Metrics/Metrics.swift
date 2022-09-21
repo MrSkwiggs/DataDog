@@ -27,8 +27,11 @@ struct Metrics: View {
     var body: some View {
         List {
             Group {
-                gauge(value: viewModel.cpuLoad, title: "CPU")
-                    .animation(.default, value: viewModel.cpuLoad)
+                HStack {
+                    gauge(value: viewModel.cpuLoad, title: "CPU")
+                        .animation(.default, value: viewModel.cpuLoad)
+                    Text(viewModel.cpuLoadExceededThreshold ? "Exceeded" : "Nominal")
+                }
                 gauge(value: viewModel.memoryLoad, title: "MEM")
                     .animation(.default, value: viewModel.memoryLoad)
                 gauge(value: viewModel.batteryState, title: "BATT")
