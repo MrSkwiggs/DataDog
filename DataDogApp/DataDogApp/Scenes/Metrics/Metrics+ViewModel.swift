@@ -29,6 +29,12 @@ extension Metrics {
         }
         
         private func setupSubscriptions() {
+            
+            // Generally, we should avoid using `assign(to: _, on: _)`
+            // as it creates a strong retain cycle.
+            // However, in the case of `@Published` values, Swift handles this for us
+            // and makes it memory-safe.
+            
             cpuLoadProvider
                 .publisher
                 .receive(on: DispatchQueue.main)
@@ -36,7 +42,7 @@ extension Metrics {
                 .store(in: &subscriptions)
             
             memoryLoadProvider
-                .publisher
+                .percentagePublisher
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.memoryLoad, on: self)
                 .store(in: &subscriptions)
