@@ -11,9 +11,8 @@ import Foundation
  A low-level helper that retrieves memory load.
  
  Most of the implementation were taken from various threads I could find online (with references hereafter). Some modifications were required to fit it into this project however.
- - Note: Base implementation [Credits VenoMKO](https://stackoverflow.com/a/6795612/1033581)
- - Note: `sysctl` usage [Credits Matt Gallagher](https://github.com/mattgallagher/CwlUtils/blob/master/Sources/CwlUtils/CwlSysctl.swift)
- - Note: `vm_deallocate` [Credits rsfinn](https://stackoverflow.com/a/48630296/1033581)
+ - note: Total System Memory Usage Implementation [Credits @Fangming](https://stackoverflow.com/a/44742639/3929910)
+ - note: App Memory Usage Implementation [Credits mAc](https://stackoverflow.com/a/64893753/3929910)
  */
 class MemoryLoadWatcher: MetricProviderUseCase {
     
@@ -23,6 +22,12 @@ class MemoryLoadWatcher: MetricProviderUseCase {
     }()
     
     func fetchMetric() throws -> Float {
+        // Uncomment either one
+        // try appUsage()
+        try totalSystemUsage()
+    }
+    
+    func appUsage() throws -> Float {
         // The `TASK_VM_INFO_COUNT` and `TASK_VM_INFO_REV1_COUNT` macros are too
         // complex for the Swift C importer, so we have to define them ourselves.
         let TASK_VM_INFO_COUNT = mach_msg_type_number_t(MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<integer_t>.size)
@@ -49,6 +54,26 @@ class MemoryLoadWatcher: MetricProviderUseCase {
         let usedBytesInt: UInt64 = UInt64(usedBytes)
         let usedMB = usedBytesInt / 1024 / 1024
         return Float(usedMB)
+    }
+    
+    func totalSystemUsage() throws -> Float {
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+        
+        let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                task_info(mach_task_self_,
+                          task_flavor_t(MACH_TASK_BASIC_INFO),
+                          $0,
+                          &count)
+            }
+        }
+        
+        guard kerr == KERN_SUCCESS else {
+            throw Error.kernelReturnError
+        }
+        
+        return Float(info.resident_size) / 1024 / 1024
     }
 }
 

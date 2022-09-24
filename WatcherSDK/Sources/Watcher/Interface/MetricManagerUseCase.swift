@@ -13,7 +13,7 @@ public protocol MetricManagerUseCase: AnyObject {
     /// This provider's metric publisher
     var publisher: AnyPublisher<Float, Never> { get }
     
-    /// This provider's metric as a percentage of its min & max values
+    /// This provider's metric publisher as a percentage of its min & max values
     var percentagePublisher: AnyPublisher<Float, Never> { get }
     
     /// This provider's threshold value
