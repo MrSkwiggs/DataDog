@@ -67,10 +67,12 @@ open class MetricManager: MetricManagerUseCase {
     
     internal init(metricProvider: any MetricProviderUseCase,
                   threshold: Float = 0.5,
+                  thresholdRange: MetricThresholdRange = .lower,
                   refreshFrequency: TimeInterval = 1,
                   queue: DispatchQueue) {
         self.metricProvider = metricProvider
         self.threshold = threshold
+        self.thresholdRange = thresholdRange
         self.refreshFrequency = refreshFrequency
         self.queue = queue
         self.timer.resume()

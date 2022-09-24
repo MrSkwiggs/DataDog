@@ -7,19 +7,26 @@ public class Watcher {
 
     public private(set) var memoryLoadConfigurator: MetricProviderConfigurator
     public unowned var memoryLoad: MetricManager { memoryLoadConfigurator.metricManager }
+    
+    public private(set) var batteryLevelConfigurator: MetricProviderConfigurator
+    public unowned var batteryLevel: MetricManager { batteryLevelConfigurator.metricManager }
 
     private init(cpuLoadConfigurator: CPULoad,
-                 memoryLoadConfigurator: MemoryLoad) {
+                 memoryLoadConfigurator: MemoryLoad,
+                 batteryLevelConfigurator: BatteryLevel) {
         self.cpuLoadConfigurator = cpuLoadConfigurator
         self.memoryLoadConfigurator = memoryLoadConfigurator
+        self.batteryLevelConfigurator = batteryLevelConfigurator
     }
     
     public static func configure(cpuThreshold: Float,
                                  memoryLoadThreshold: Float,
+                                 batteryLevelThreshold: Float,
                                  refreshFrequency: TimeInterval) -> Watcher {
         assertValueClamped(cpuThreshold)
         return .default(cpuThreshold: cpuThreshold,
                         memoryLoadThreshold: memoryLoadThreshold,
+                        batteryLevelThreshold: batteryLevelThreshold,
                         refreshFrequency: refreshFrequency)
     }
 }
@@ -27,17 +34,23 @@ public class Watcher {
 private extension Watcher {
     static func `default`(cpuThreshold: Float,
                           memoryLoadThreshold: Float,
+                          batteryLevelThreshold: Float,
                           refreshFrequency: TimeInterval) -> Watcher {
         let cpuLoadQueue = DispatchQueue(label: "cpu-load",
                                          qos: .background)
         let memoryLoadQueue = DispatchQueue(label: "memory-load",
                                          qos: .background)
+        let batteryLevelQueue = DispatchQueue(label: "battery-level",
+                                            qos: .background)
         return .init(cpuLoadConfigurator: CPULoad(threshold: cpuThreshold,
                                                   refreshFrequency: refreshFrequency,
                                                   queue: cpuLoadQueue),
                      memoryLoadConfigurator: .init(threshold: memoryLoadThreshold,
                                                    refreshFrequency: refreshFrequency,
-                                                   queue: memoryLoadQueue))
+                                                   queue: memoryLoadQueue),
+                     batteryLevelConfigurator: .init(threshold: batteryLevelThreshold,
+                                                     refreshFrequency: refreshFrequency,
+                                                     queue: batteryLevelQueue))
     }
 }
 

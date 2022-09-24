@@ -14,12 +14,13 @@ struct ContentView: View {
     static let watcher: Watcher =
         .configure(cpuThreshold: 0.25,
                    memoryLoadThreshold: 0.5,
+                   batteryLevelThreshold: 0.99,
                    refreshFrequency: 1)
     
     let metricsViewModel: Metrics.ViewModel =
         .init(cpuLoadProvider: ContentView.watcher.cpuLoad,
               memoryLoadProvider: ContentView.watcher.memoryLoad,
-              batteryStateProvider: Mock.MetricConfigurator().metricManager)
+              batteryStateProvider: ContentView.watcher.batteryLevel)
     
     var body: some View {
         TabView {

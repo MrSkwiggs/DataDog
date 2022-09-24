@@ -24,7 +24,7 @@ extension Mock {
             let randomInt = Int.random(in: 0...30)
             
             let delta: Float
-            // 2 chances in 20 to have a "spike" in load
+            // 2 chances in 30 to have a "spike" in load
             if randomInt == 0 || randomInt == 1 {
                 delta = .random(in: 0.25...0.75)
             } else {

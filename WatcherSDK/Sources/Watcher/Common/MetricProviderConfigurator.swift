@@ -14,10 +14,12 @@ open class MetricProviderConfigurator: MetricManagerConfiguratorUseCase {
     
     public init(metricProvider: any MetricProviderUseCase,
                 threshold: Float = 0.5,
+                thresholdRange: MetricThresholdRange = .lower,
                 refreshFrequency: TimeInterval = 1.0,
                 queue: DispatchQueue) {
         self.metricManager = .init(metricProvider: metricProvider,
                                    threshold: threshold,
+                                   thresholdRange: thresholdRange,
                                    refreshFrequency: refreshFrequency,
                                    queue: queue)
     }
