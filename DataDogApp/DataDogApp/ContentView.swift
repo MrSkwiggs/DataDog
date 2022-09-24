@@ -11,12 +11,12 @@ import SFSafeSymbols
 
 struct ContentView: View {
     
-    static let watcher: Watcher = .configure(refreshFrequency: 1)
+    static let watcher: Watcher = .configure(cpuThreshold: 0.25, refreshFrequency: 1)
     
     let metricsViewModel: Metrics.ViewModel =
-        .init(cpuLoadProvider: ContentView.watcher.cpuLoadWatcher,
-              memoryLoadProvider: Mock.CPULoadProvider(refreshFrequency: 3),
-              batteryStateProvider: Mock.CPULoadProvider(refreshFrequency: 5))
+        .init(cpuLoadProvider: ContentView.watcher.cpuLoad,
+              memoryLoadProvider: Mock.MetricConfigurator().metricManager,
+              batteryStateProvider: Mock.MetricConfigurator().metricManager)
     
     var body: some View {
         TabView {
@@ -29,9 +29,6 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemSymbol: .listDash)
                 }
-        }
-        .onAppear {
-            ContentView.watcher.cpuLoadWatcher.set(threshold: 0.25, range: .lower)
         }
     }
 }

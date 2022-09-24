@@ -8,7 +8,7 @@ import Foundation
 
 /// Represents how a metric should treat the range of valid values with regards to its threshold
 ///
-/// The standard representation considers the `lower` range of values as valid (that is, values numerically _under_ the threshold).
+/// The default representation considers the `lower` range of values as valid (that is, values numerically _under_ the threshold).
 /// Therefore, `MetricBoundaryEvent.exceeded` events are emitted when the metric increases, and goes numerically _above_ its threshold.
 ///
 /// Inversely, the `upper` representation treats values as valid if they are numerically _above_ the threshold.

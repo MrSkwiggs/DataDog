@@ -43,10 +43,15 @@ struct Metrics: View {
 }
 
 struct Metrics_Previews: PreviewProvider {
+    
+    static let cpuLoadConfigurator = Mock.MetricConfigurator()
+    static let memoryLoadConfigurator = Mock.MetricConfigurator()
+    static let batteryState = Mock.MetricConfigurator()
+    
     static let metricsViewModel: Metrics.ViewModel =
-        .init(cpuLoadProvider: Mock.CPULoadProvider(),
-              memoryLoadProvider: Mock.CPULoadProvider(refreshFrequency: 3),
-              batteryStateProvider: Mock.CPULoadProvider(refreshFrequency: 5))
+        .init(cpuLoadProvider: cpuLoadConfigurator.metricManager,
+              memoryLoadProvider: memoryLoadConfigurator.metricManager,
+              batteryStateProvider: batteryState.metricManager)
     static var previews: some View {
         Metrics(viewModel: metricsViewModel)
     }

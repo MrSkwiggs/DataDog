@@ -12,25 +12,21 @@ import Watcher
 extension Metrics {
     class ViewModel: ObservableObject {
         
-        typealias MetricProvider = MetricProviderUseCase
-        
-        private let cpuLoadProvider: CPULoadProviderUseCase
-        private let memoryLoadProvider: any MetricProvider
-        private let batteryStateProvider: any MetricProvider
+        private let cpuLoadProvider: MetricManager
+        private let memoryLoadProvider: MetricManager
+        private let batteryStateProvider: MetricManager
         
         private var subscriptions: [AnyCancellable] = []
         
-        init<MemoryLoadProvider: MetricProvider,
-             BatteryStateProvider: MetricProvider>(
-                cpuLoadProvider: CPULoadProviderUseCase,
-                memoryLoadProvider: MemoryLoadProvider,
-                batteryStateProvider: BatteryStateProvider) {
-                    self.cpuLoadProvider = cpuLoadProvider
-                    self.memoryLoadProvider = memoryLoadProvider
-                    self.batteryStateProvider = batteryStateProvider
-                    
-                    setupSubscriptions()
-                }
+        init(cpuLoadProvider: MetricManager,
+             memoryLoadProvider: MetricManager,
+             batteryStateProvider: MetricManager) {
+            self.cpuLoadProvider = cpuLoadProvider
+            self.memoryLoadProvider = memoryLoadProvider
+            self.batteryStateProvider = batteryStateProvider
+            
+            setupSubscriptions()
+        }
         
         private func setupSubscriptions() {
             cpuLoadProvider

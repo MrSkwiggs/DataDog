@@ -11,11 +11,12 @@ import Combine
 /**
  A low-level helper that retrieves CPU & thread load.
  
+ Most of the implementation was taken from various threads I could find online (with references hereafter). Some modifications were required to fit it into this project however.
  - Note: Base implementation [Credits VenoMKO](https://stackoverflow.com/a/6795612/1033581)
  - Note: `sysctl` usage [Credits Matt Gallagher](https://github.com/mattgallagher/CwlUtils/blob/master/Sources/CwlUtils/CwlSysctl.swift)
  - Note: `vm_deallocate` [Credits rsfinn](https://stackoverflow.com/a/48630296/1033581)
  */
-class CPULoadWatcher {
+class CPULoadWatcher: MetricProviderUseCase {
     private var cpuInfo: processor_info_array_t!
     private var prevCpuInfo: processor_info_array_t?
     private var numCpuInfo: mach_msg_type_number_t = 0
@@ -35,7 +36,7 @@ class CPULoadWatcher {
         }
     }
     
-    func fetchCPULoad() throws -> Float {
+    func fetchMetric() throws -> Float {
         var loads: [Float] = []
         
         var numCPUsU: natural_t = 0
