@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// A type that provides values for a metric.
 public protocol MetricProviderUseCase {
+    
+    /// Fetches & computes the latest, most up-to-date value for its metric.
     func fetchMetric() throws -> Float 
 }

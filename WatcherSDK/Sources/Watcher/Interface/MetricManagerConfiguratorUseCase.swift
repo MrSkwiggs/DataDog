@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MetricManagerConfiguratorUseCase.swift
 //  
 //
 //  Created by Dorian Grolaux on 24/09/2022.
