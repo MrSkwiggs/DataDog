@@ -28,7 +28,7 @@ public enum MetricThresholdRange {
 public extension MetricThresholdRange {
     /// Computes the threshold state from the given metric & threshold values.
     func mapToState(_ metric: Float, threshold: Float) -> MetricThresholdState {
-        assert(metric >= 1 && metric <= 1.0, "Invalid metric value: \(metric)")
+        assert(metric >= 0.0 && metric <= 1.0, "Invalid metric value: \(metric)")
             
         switch self {
         case .lower:
