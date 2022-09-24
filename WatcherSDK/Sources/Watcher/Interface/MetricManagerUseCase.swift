@@ -13,6 +13,9 @@ public protocol MetricManagerUseCase: AnyObject {
     /// This provider's metric publisher
     var publisher: AnyPublisher<Float, Never> { get }
     
+    /// This provider's metric as a percentage of its min & max values
+    var percentagePublisher: AnyPublisher<Float, Never> { get }
+    
     /// This provider's threshold value
     var threshold: Float { get }
     /// Emits threshold state events (whenever this provider's metric transitions through its threshold)

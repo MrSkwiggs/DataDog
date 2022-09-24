@@ -11,6 +11,9 @@ import Watcher
 extension Mock {
     class RandomMetricProvider: MetricProviderUseCase {
         
+        static let minValue: Float = 0.0
+        static let maxValue: Float = 1.0
+        
         private var metric: Float = 0.0
         
         init(initialValue: Float = 0.0) {

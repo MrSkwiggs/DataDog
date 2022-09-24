@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CPULoadWatcher.swift
 //  
 //
 //  Created by Dorian Grolaux on 20/09/2022.
@@ -11,12 +11,15 @@ import Combine
 /**
  A low-level helper that retrieves CPU & thread load.
  
- Most of the implementation was taken from various threads I could find online (with references hereafter). Some modifications were required to fit it into this project however.
+ Most of the implementation were taken from various threads I could find online (with references hereafter). Some modifications were required to fit it into this project however.
  - Note: Base implementation [Credits VenoMKO](https://stackoverflow.com/a/6795612/1033581)
  - Note: `sysctl` usage [Credits Matt Gallagher](https://github.com/mattgallagher/CwlUtils/blob/master/Sources/CwlUtils/CwlSysctl.swift)
  - Note: `vm_deallocate` [Credits rsfinn](https://stackoverflow.com/a/48630296/1033581)
  */
 class CPULoadWatcher: MetricProviderUseCase {
+    
+    // MARK: - Private
+    
     private var cpuInfo: processor_info_array_t!
     private var prevCpuInfo: processor_info_array_t?
     private var numCpuInfo: mach_msg_type_number_t = 0
@@ -24,7 +27,9 @@ class CPULoadWatcher: MetricProviderUseCase {
     private var numCPUs: uint = 0
     private let CPUUsageLock: NSLock = NSLock()
     
-    init() {
+    // MARK: - Internal
+    
+    internal init() {
         let mibKeys: [Int32] = [CTL_HW, HW_NCPU]
         // sysctl Swift usage credit Matt Gallagher
         mibKeys.withUnsafeBufferPointer() { mib in
@@ -35,6 +40,11 @@ class CPULoadWatcher: MetricProviderUseCase {
             }
         }
     }
+    
+    // MARK: Protocol Conformance
+    
+    static let minValue: Float = 0.0
+    static let maxValue: Float = 1.0
     
     func fetchMetric() throws -> Float {
         var loads: [Float] = []

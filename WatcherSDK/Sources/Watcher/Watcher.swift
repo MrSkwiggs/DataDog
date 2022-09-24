@@ -4,23 +4,40 @@ public class Watcher {
     
     public private(set) var cpuLoadConfigurator: MetricProviderConfigurator
     public unowned var cpuLoad: MetricManager { cpuLoadConfigurator.metricManager }
-//    public private(set) var memoryLoadWatcher: MemoryLoadWatcher
 
-    private init(cpuLoadConfigurator: CPULoad) {
+    public private(set) var memoryLoadConfigurator: MetricProviderConfigurator
+    public unowned var memoryLoad: MetricManager { memoryLoadConfigurator.metricManager }
+
+    private init(cpuLoadConfigurator: CPULoad,
+                 memoryLoadConfigurator: MemoryLoad) {
         self.cpuLoadConfigurator = cpuLoadConfigurator
+        self.memoryLoadConfigurator = memoryLoadConfigurator
     }
     
-    public static func configure(cpuThreshold: Float, refreshFrequency: TimeInterval) -> Watcher {
+    public static func configure(cpuThreshold: Float,
+                                 memoryLoadThreshold: Float,
+                                 refreshFrequency: TimeInterval) -> Watcher {
         assertValueClamped(cpuThreshold)
-        return .default(cpuThreshold: cpuThreshold, refreshFrequency: refreshFrequency)
+        return .default(cpuThreshold: cpuThreshold,
+                        memoryLoadThreshold: memoryLoadThreshold,
+                        refreshFrequency: refreshFrequency)
     }
 }
 
 private extension Watcher {
-    static func `default`(cpuThreshold: Float, refreshFrequency: TimeInterval) -> Watcher {
+    static func `default`(cpuThreshold: Float,
+                          memoryLoadThreshold: Float,
+                          refreshFrequency: TimeInterval) -> Watcher {
         let cpuLoadQueue = DispatchQueue(label: "cpu-load",
                                          qos: .background)
-        return .init(cpuLoadConfigurator: CPULoad(threshold: cpuThreshold, refreshFrequency: refreshFrequency, queue: cpuLoadQueue))
+        let memoryLoadQueue = DispatchQueue(label: "memory-load",
+                                         qos: .background)
+        return .init(cpuLoadConfigurator: CPULoad(threshold: cpuThreshold,
+                                                  refreshFrequency: refreshFrequency,
+                                                  queue: cpuLoadQueue),
+                     memoryLoadConfigurator: .init(threshold: memoryLoadThreshold,
+                                                   refreshFrequency: refreshFrequency,
+                                                   queue: memoryLoadQueue))
     }
 }
 

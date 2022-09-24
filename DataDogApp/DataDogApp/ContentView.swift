@@ -11,11 +11,14 @@ import SFSafeSymbols
 
 struct ContentView: View {
     
-    static let watcher: Watcher = .configure(cpuThreshold: 0.25, refreshFrequency: 1)
+    static let watcher: Watcher =
+        .configure(cpuThreshold: 0.25,
+                   memoryLoadThreshold: 0.5,
+                   refreshFrequency: 1)
     
     let metricsViewModel: Metrics.ViewModel =
         .init(cpuLoadProvider: ContentView.watcher.cpuLoad,
-              memoryLoadProvider: Mock.MetricConfigurator().metricManager,
+              memoryLoadProvider: ContentView.watcher.memoryLoad,
               batteryStateProvider: Mock.MetricConfigurator().metricManager)
     
     var body: some View {

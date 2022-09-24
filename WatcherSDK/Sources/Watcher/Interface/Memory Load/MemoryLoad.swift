@@ -1,16 +1,15 @@
 //
-//  CPULoad.swift
+//  MemoryLoad.swift
 //  
 //
-//  Created by Dorian Grolaux on 20/09/2022.
+//  Created by Dorian Grolaux on 24/09/2022.
 //
 
 import Foundation
 
-/// This class actually implements the CPULoadProvider use case
-public class CPULoad: MetricProviderConfigurator {
+public class MemoryLoad: MetricProviderConfigurator {
     internal init(threshold: Float, refreshFrequency: TimeInterval, queue: DispatchQueue) {
-        super.init(metricProvider: CPULoadWatcher(),
+        super.init(metricProvider: MemoryLoadWatcher(),
                    threshold: threshold,
                    refreshFrequency: refreshFrequency,
                    queue: queue)

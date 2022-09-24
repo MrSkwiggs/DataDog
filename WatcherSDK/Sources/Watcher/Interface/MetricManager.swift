@@ -38,8 +38,9 @@ open class MetricManager: MetricManagerUseCase {
     private func computeThresholdState(for metricValue: Float) {
         let metric = metricValue
         
-        let thresholdEvent = thresholdRange.mapToState(metric, threshold: threshold)
+        let thresholdEvent = thresholdRange.mapToState(metric, on: type(of: metricProvider).self, threshold: threshold)
         
+        // don't emit duplicate values
         guard thresholdEvent != thresholdEventSubject.value else { return }
         
         thresholdEventSubject.send(thresholdEvent)
@@ -54,7 +55,7 @@ open class MetricManager: MetricManagerUseCase {
                 self.computeThresholdState(for: newValue)
             } catch {
                 // TODO: needs more thorough error handling, but eventually if this fails it's not worth crashing
-                // just handle silently (don't emit, but log)
+                // just handle silently (don't emit, but log) for now
                 print("Unhandled Metric Manager error: \(error)")
             }
         }
@@ -86,6 +87,17 @@ open class MetricManager: MetricManagerUseCase {
     public private(set) lazy var publisher: AnyPublisher<Float, Never> = {
         metricSubject.eraseToAnyPublisher()
     }()
+    
+    public private(set) lazy var percentagePublisher: AnyPublisher<Float, Never> = {
+        metricSubject
+            .compactMap { [weak self] value in
+                guard let self else { return nil }
+                let Limits = type(of: self.metricProvider)
+                return value / Limits.maxValue
+            }
+            .eraseToAnyPublisher()
+    }()
+    
     public private(set) var threshold: Float
     public private(set) lazy var thresholdEventPublisher: AnyPublisher<MetricThresholdState, Never> = {
         thresholdEventSubject.eraseToAnyPublisher()
