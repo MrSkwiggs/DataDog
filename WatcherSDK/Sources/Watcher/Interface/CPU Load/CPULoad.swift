@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// This class actually implements the CPULoadProvider use case
+/// Implementation of the CPU load provider
 public class CPULoad: MetricProviderConfigurator {
     internal init(threshold: Float, refreshFrequency: TimeInterval, queue: DispatchQueue) {
         super.init(metricProvider: CPULoadWatcher(),

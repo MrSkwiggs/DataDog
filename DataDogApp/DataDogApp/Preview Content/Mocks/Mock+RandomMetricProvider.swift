@@ -9,6 +9,7 @@ import Foundation
 import Watcher
 
 extension Mock {
+    /// Provides random values over time with some continuity between values
     class RandomMetricProvider: MetricProviderUseCase {
         
         static let minValue: Float = 0.0
@@ -31,13 +32,8 @@ extension Mock {
                 delta = .random(in: 0.0...0.2)
             }
             
-            let sign: Float
             // decide if delta is positive or negative
-            if .random() {
-                sign = 1.0
-            } else {
-                sign = -1.0
-            }
+            let sign: Float = .random() ? 1.0 : -1.0
             
             let newValue = metric + (delta * sign)
             self.metric = (0.0...1.0).clamping(newValue)
