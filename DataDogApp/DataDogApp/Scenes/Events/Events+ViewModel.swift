@@ -1,17 +1,16 @@
 //
-//  MetricsViewModel.swift
-//  DataDogWatchApp
+//  Events+ViewModel.swift
+//  DataDogApp
 //
-//  Created by Dorian Grolaux on 20/09/2022.
+//  Created by Dorian Grolaux on 24/09/2022.
 //
 
 import Foundation
 import Combine
 import Watcher
 
-extension Metrics {
+extension Events {
     class ViewModel: ObservableObject {
-        
         private let cpuLoadProvider: MetricManager
         private let memoryLoadProvider: MetricManager
         private let batteryStateProvider: MetricManager
@@ -36,44 +35,36 @@ extension Metrics {
             // and makes it memory-safe.
             
             cpuLoadProvider
-                .publisher
+                .thresholdEventPublisher
                 .receive(on: DispatchQueue.main)
-                .assign(to: \.cpuLoad, on: self)
+                .map { [weak] thresholdState in
+                    
+                }
                 .store(in: &subscriptions)
             
             memoryLoadProvider
-                .percentagePublisher
+                .thresholdEventPublisher
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.memoryLoad, on: self)
                 .store(in: &subscriptions)
             
             batteryStateProvider
-                .publisher
+                .thresholdEventPublisher
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.batteryState, on: self)
                 .store(in: &subscriptions)
-            
-            cpuLoadProvider
-                .thresholdStatePublisher
-                .receive(on: DispatchQueue.main)
-                .map(\.isExceeding)
-                .assign(to: \.cpuLoadExceededThreshold, on: self)
-                .store(in: &subscriptions)
+        }
+        
+        private func thresholdStateToEvent(_ thresholdState: MetricThresholdState, for metric: Event.Metric) -> Event {
+            switch thresholdState {
+            case .nominal:
+                return .ini
+            case .exceeded:
+                <#code#>
+            }
         }
         
         @Published
-        var cpuLoad: Float = 0
-        
-        @Published
-        var cpuLoadThreshold: Float = 0.25
-        
-        @Published
-        var cpuLoadExceededThreshold: Bool = false
-        
-        @Published
-        var memoryLoad: Float = 0
-        
-        @Published
-        var batteryState: Float = 0
+        var events: [Event] = []
     }
 }

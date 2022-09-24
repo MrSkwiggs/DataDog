@@ -101,7 +101,7 @@ open class MetricManager: MetricManagerUseCase {
     }()
     
     public private(set) var threshold: Float
-    public private(set) lazy var thresholdEventPublisher: AnyPublisher<MetricThresholdState, Never> = {
+    public private(set) lazy var thresholdStatePublisher: AnyPublisher<MetricThresholdState, Never> = {
         thresholdEventSubject.eraseToAnyPublisher()
     }()
     public internal(set) var refreshFrequency: TimeInterval

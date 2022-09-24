@@ -19,7 +19,7 @@ public protocol MetricManagerUseCase: AnyObject {
     /// This provider's threshold value
     var threshold: Float { get }
     /// Emits threshold state events (whenever this provider's metric transitions through its threshold)
-    var thresholdEventPublisher: AnyPublisher<MetricThresholdState, Never> { get }
+    var thresholdStatePublisher: AnyPublisher<MetricThresholdState, Never> { get }
     /// This provider's refresh frequency (how often it emits through its `publisher`, in seconds.
     var refreshFrequency: TimeInterval { get }
 }

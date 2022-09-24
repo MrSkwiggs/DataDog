@@ -13,7 +13,7 @@ import Foundation
 ///
 /// Inversely, the `upper` representation treats values as valid if they are numerically _above_ the threshold.
 /// That is, `MetricBoundaryEvent.exceeded` events are emitted when the metric decreases, and goes numerically _under_ its threshold
-public enum MetricThresholdRange {
+public enum MetricThresholdRange: Codable {
     /// Defines the range of values considered as `nominal` as the values numerically inferior to a metric's threshold
     ///
     /// `0 <= nominal values < threshold <= exceeding values <= 1`
@@ -28,8 +28,6 @@ public enum MetricThresholdRange {
 public extension MetricThresholdRange {
     /// Computes the threshold state from the given metric & threshold values.
     func mapToState(_ metric: Float, on Limits: MetricProviderUseCase.Type, threshold: Float) -> MetricThresholdState {
-//        assert(metric >= 0.0 && metric <= 1.0, "Invalid metric value: \(metric)")
-            
         switch self {
         case .lower:
             guard Limits.minValue <= metric && metric < threshold * Limits.maxValue else {

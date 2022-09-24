@@ -8,7 +8,7 @@
 import Foundation
 
 /// Events emitted when metrics reach their threshold
-public enum MetricThresholdState {
+public enum MetricThresholdState: Codable {
     /// The metric has entered the range of allotted values under its threshold
     case nominal
     /// The metric has reached and exceeded its allotted threshold value range
