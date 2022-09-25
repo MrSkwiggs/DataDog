@@ -11,9 +11,9 @@ import Watcher
 class AppDelegate: NSObject, UIApplicationDelegate {
     
     private lazy var watcher: Watcher = .configure(cpuThreshold: 0.25,
-                                           memoryLoadThreshold: 0.01,
-                                           batteryLevelThreshold: 0.9999,
-                                           refreshFrequency: 1)
+                                                   memoryLoadThreshold: 0.01,
+                                                   batteryLevelThreshold: 0.9999,
+                                                   refreshFrequency: 0.3)
     
     var viewModelProvider: ViewModelProvider!
     

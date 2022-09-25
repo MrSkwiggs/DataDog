@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-/// An object that manages a metric provider and provides convenience Combine accessors wrapped around it.
+/// An object that manages a metric provider and offers convenience Combine accessors wrapped around it.
 open class MetricManager: MetricManagerUseCase {
     
     // MARK: - Private
@@ -18,6 +18,9 @@ open class MetricManager: MetricManagerUseCase {
     
     /// The metric subject, used as a `private(set)` accessor
     private let metricSubject: PassthroughSubject<Float, Never> = .init()
+    
+    /// The metric's threshold subject, used a `private(set)` accessor
+    private let thresholdSubject: CurrentValueSubject<Float, Never>
     
     /// The metric's threshold events subject, used as a `private(set)` accessor
     private let thresholdEventSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal)
@@ -38,7 +41,7 @@ open class MetricManager: MetricManagerUseCase {
     private func computeThresholdState(for metricValue: Float) {
         let metric = metricValue
         
-        let thresholdEvent = thresholdRange.mapToState(metric, on: type(of: metricProvider).self, threshold: threshold)
+        let thresholdEvent = thresholdRange.mapToState(metric, on: type(of: metricProvider).self, threshold: thresholdSubject.value)
         
         // don't emit duplicate values
         guard thresholdEvent != thresholdEventSubject.value else { return }
@@ -52,6 +55,7 @@ open class MetricManager: MetricManagerUseCase {
             do {
                 let newValue = try self.metricProvider.fetchMetric()
                 self.metricSubject.send(newValue)
+                self.history.append(newValue)
                 self.computeThresholdState(for: newValue)
             } catch {
                 // TODO: needs more thorough error handling, but eventually if this fails it's not worth crashing
@@ -71,7 +75,7 @@ open class MetricManager: MetricManagerUseCase {
                   refreshFrequency: TimeInterval = 1,
                   queue: DispatchQueue) {
         self.metricProvider = metricProvider
-        self.threshold = threshold
+        self.thresholdSubject = .init(threshold)
         self.thresholdRange = thresholdRange
         self.refreshFrequency = refreshFrequency
         self.queue = queue
@@ -81,7 +85,7 @@ open class MetricManager: MetricManagerUseCase {
     internal func set(threshold: Float, range: MetricThresholdRange) {
         // set the range first, as threshold events are re-calculated after mutating the threshold
         self.thresholdRange = range
-        self.threshold = threshold
+        self.thresholdSubject.send(threshold)
     }
     
     // MARK: - Protocol Conformance
@@ -95,14 +99,20 @@ open class MetricManager: MetricManagerUseCase {
             .compactMap { [weak self] value in
                 guard let self else { return nil }
                 let Limits = type(of: self.metricProvider)
-                return value / Limits.maxValue
+                let newValue = value / Limits.maxValue
+                self.percentageHistory.append(newValue)
+                return newValue
             }
             .eraseToAnyPublisher()
     }()
     
-    public private(set) var threshold: Float
+    public private(set) lazy var thresholdPublisher: AnyPublisher<Float, Never> = {
+        thresholdSubject.eraseToAnyPublisher()
+    }()
     public private(set) lazy var thresholdStatePublisher: AnyPublisher<MetricThresholdState, Never> = {
         thresholdEventSubject.eraseToAnyPublisher()
     }()
     public internal(set) var refreshFrequency: TimeInterval
+    public private(set) var history: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
+    public private(set) var percentageHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
 }

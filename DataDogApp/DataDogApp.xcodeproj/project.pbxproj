@@ -24,6 +24,11 @@
 		8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */; };
 		8D4F135028E0681400C948A9 /* RootView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */; };
 		8D4F135228E06A8300C948A9 /* ViewModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */; };
+		8D4F135428E0845400C948A9 /* Metrics.Metric+Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135328E0845400C948A9 /* Metrics.Metric+Gauge.swift */; };
+		8D4F135728E08CC100C948A9 /* Color+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135628E08CC100C948A9 /* Color+Convenience.swift */; };
+		8D4F135928E08F2B00C948A9 /* Metrics+Metric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135828E08F2B00C948A9 /* Metrics+Metric.swift */; };
+		8D4F135F28E09FB900C948A9 /* Mock+ChartValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135E28E09FB900C948A9 /* Mock+ChartValues.swift */; };
+		8D4F136028E0A07400C948A9 /* Metrics+Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135A28E0963000C948A9 /* Metrics+Chart.swift */; };
 		8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */; };
 		8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCE28DA3AA10014C59C /* Mock.swift */; };
 /* End PBXBuildFile section */
@@ -65,6 +70,11 @@
 		8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomEventMetricManager.swift"; sourceTree = "<group>"; };
 		8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView+ViewModel.swift"; sourceTree = "<group>"; };
 		8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProvider.swift; sourceTree = "<group>"; };
+		8D4F135328E0845400C948A9 /* Metrics.Metric+Gauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics.Metric+Gauge.swift"; sourceTree = "<group>"; };
+		8D4F135628E08CC100C948A9 /* Color+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Convenience.swift"; sourceTree = "<group>"; };
+		8D4F135828E08F2B00C948A9 /* Metrics+Metric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+Metric.swift"; sourceTree = "<group>"; };
+		8D4F135A28E0963000C948A9 /* Metrics+Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+Chart.swift"; sourceTree = "<group>"; };
+		8D4F135E28E09FB900C948A9 /* Mock+ChartValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+ChartValues.swift"; sourceTree = "<group>"; };
 		8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+ViewModel.swift"; sourceTree = "<group>"; };
 		8DA6ECCE28DA3AA10014C59C /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +133,7 @@
 			children = (
 				8D0771DE28DA32210022433F /* Assets.xcassets */,
 				8D0771DA28DA321F0022433F /* DataDogWatchApp.swift */,
+				8D4F135528E08CB100C948A9 /* Extensions */,
 				8D0771E028DA32210022433F /* Preview Content */,
 				8D07720728DA35510022433F /* Scenes */,
 				8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */,
@@ -199,10 +210,21 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
+		8D4F135528E08CB100C948A9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8D4F135628E08CC100C948A9 /* Color+Convenience.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		8DA6ECC628DA39670014C59C /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
 				8D07720A28DA356B0022433F /* Metrics.swift */,
+				8D4F135A28E0963000C948A9 /* Metrics+Chart.swift */,
+				8D4F135828E08F2B00C948A9 /* Metrics+Metric.swift */,
+				8D4F135328E0845400C948A9 /* Metrics.Metric+Gauge.swift */,
 				8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */,
 			);
 			path = Metrics;
@@ -212,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				8DA6ECCE28DA3AA10014C59C /* Mock.swift */,
+				8D4F135E28E09FB900C948A9 /* Mock+ChartValues.swift */,
 				8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */,
 				8D0D145128DF21420075E192 /* Mock+RandomMetricProvider.swift */,
 				8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */,
@@ -357,16 +380,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D0D145428DF22970075E192 /* Mock+MetricConfigurator.swift in Sources */,
+				8D4F135728E08CC100C948A9 /* Color+Convenience.swift in Sources */,
 				8D4F135228E06A8300C948A9 /* ViewModelProvider.swift in Sources */,
+				8D4F135428E0845400C948A9 /* Metrics.Metric+Gauge.swift in Sources */,
 				8D07720D28DA35710022433F /* Events.swift in Sources */,
 				8D0771DD28DA321F0022433F /* RootView.swift in Sources */,
+				8D4F135928E08F2B00C948A9 /* Metrics+Metric.swift in Sources */,
 				8D4F135028E0681400C948A9 /* RootView+ViewModel.swift in Sources */,
 				8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */,
+				8D4F136028E0A07400C948A9 /* Metrics+Chart.swift in Sources */,
 				8D07720B28DA356B0022433F /* Metrics.swift in Sources */,
 				8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */,
 				8D4F134928DF7CF400C948A9 /* Events+ViewModel.swift in Sources */,
 				8D0771DB28DA321F0022433F /* DataDogWatchApp.swift in Sources */,
 				8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */,
+				8D4F135F28E09FB900C948A9 /* Mock+ChartValues.swift in Sources */,
 				8D0D145228DF21420075E192 /* Mock+RandomMetricProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

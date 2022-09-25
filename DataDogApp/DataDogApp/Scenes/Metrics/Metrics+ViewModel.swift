@@ -36,9 +36,25 @@ extension Metrics {
             // and makes it memory-safe.
             
             cpuLoadProvider
-                .publisher
+                .percentagePublisher
                 .receive(on: DispatchQueue.main)
-                .assign(to: \.cpuLoad, on: self)
+                .sink(receiveValue: { [weak self] value in
+                    self?.cpuLoad = value
+                    self?.cpuLoadHistory.append(value)
+                })
+                .store(in: &subscriptions)
+            
+            cpuLoadProvider
+                .thresholdPublisher
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.cpuLoadThreshold, on: self)
+                .store(in: &subscriptions)
+            
+            cpuLoadProvider
+                .thresholdStatePublisher
+                .receive(on: DispatchQueue.main)
+                .map(\.isExceeding)
+                .assign(to: \.cpuLoadExceededThreshold, on: self)
                 .store(in: &subscriptions)
             
             memoryLoadProvider
@@ -52,13 +68,6 @@ extension Metrics {
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.batteryState, on: self)
                 .store(in: &subscriptions)
-            
-            cpuLoadProvider
-                .thresholdStatePublisher
-                .receive(on: DispatchQueue.main)
-                .map(\.isExceeding)
-                .assign(to: \.cpuLoadExceededThreshold, on: self)
-                .store(in: &subscriptions)
         }
         
         @Published
@@ -69,6 +78,9 @@ extension Metrics {
         
         @Published
         var cpuLoadExceededThreshold: Bool = false
+        
+        @Published
+        var cpuLoadHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
         
         @Published
         var memoryLoad: Float = 0

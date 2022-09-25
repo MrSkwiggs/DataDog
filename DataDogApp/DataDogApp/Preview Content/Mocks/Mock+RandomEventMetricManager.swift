@@ -12,11 +12,13 @@ import Watcher
 extension Mock {
     /// Provides random threshold events over time
     class RandomEventMetricManager: MetricManagerUseCase {
-        
         // MARK: - Unused
         var publisher: AnyPublisher<Float, Never> = Just(0.0).eraseToAnyPublisher()
         var percentagePublisher: AnyPublisher<Float, Never> = Just(0.0).eraseToAnyPublisher()
-        var threshold: Float = 0.0
+        var thresholdPublisher: AnyPublisher<Float, Never> = Just(0.0).eraseToAnyPublisher()
+        var history: FixedSizeCollection<Float> = []
+        var percentageHistory: FixedSizeCollection<Float> = []
+        
         
         // MARK: - Mock
         private var thresholdStateSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal)

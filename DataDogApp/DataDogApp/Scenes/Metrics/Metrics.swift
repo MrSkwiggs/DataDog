@@ -6,39 +6,45 @@
 //
 
 import SwiftUI
+import Watcher
 
 struct Metrics: View {
     
-    let gradient = Gradient(colors: [.green, .orange, .red])
+    
 
     @StateObject
     var viewModel: ViewModel
     
-    fileprivate func gauge(value: Float, title: String) -> some View {
-        return Gauge(value: value, label: {
-            Text(title)
-        }, currentValueLabel: {
-            Text("\(value * 100, specifier: "%.1f")%")
-        })
-        .gaugeStyle(.accessoryCircular)
-        .tint(gradient)
-    }
-    
     var body: some View {
-        List {
-            Group {
-                HStack {
-                    gauge(value: viewModel.cpuLoad, title: "CPU")
-                        .animation(.default, value: viewModel.cpuLoad)
-                    Text(viewModel.cpuLoadExceededThreshold ? "Exceeded" : "Nominal")
-                }
-                gauge(value: viewModel.memoryLoad, title: "MEM")
-                    .animation(.default, value: viewModel.memoryLoad)
-                gauge(value: viewModel.batteryState, title: "BATT")
-                    .animation(.default, value: viewModel.batteryState)
+        
+        Grid {
+            GridRow {
+                Metric(title: MetricType.cpu.description,
+                       gaugeName: MetricType.cpu.rawValue,
+                       value: viewModel.cpuLoad,
+                       threshold: viewModel.cpuLoadThreshold,
+                       isExceedingThreshold: viewModel.cpuLoadExceededThreshold,
+                       history: viewModel.cpuLoadHistory)
             }
-            .padding()
+//            GridRow {
+//                Gauge(title: "CPU", value: viewModel.cpuLoad)
+//                Gauge
+//            }
         }
+//        List {
+//            Group {
+//                HStack {
+//                    gauge(value: viewModel.cpuLoad, title: "CPU")
+//                        .animation(.default, value: viewModel.cpuLoad)
+//                    Text(viewModel.cpuLoadExceededThreshold ? "Exceeded" : "Nominal")
+//                }
+//                gauge(value: viewModel.memoryLoad, title: "MEM")
+//                    .animation(.default, value: viewModel.memoryLoad)
+//                gauge(value: viewModel.batteryState, title: "BATT")
+//                    .animation(.default, value: viewModel.batteryState)
+//            }
+//            .padding()
+//        }
         .navigationTitle("Metrics")
     }
 }

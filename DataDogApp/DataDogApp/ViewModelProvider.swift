@@ -23,6 +23,11 @@ class ViewModelProvider: ObservableObject {
         .init(cpuLoadProvider: watcher.cpuLoad,
               memoryLoadProvider: watcher.memoryLoad,
               batteryStateProvider: watcher.batteryLevel)
+//        .init(cpuLoadProvider: Mock.MetricConfigurator(initialValue: 0,
+//                                                       threshold: 1,
+//                                                       refreshFrequency: 1.0 / 60.0).metricManager,
+//              memoryLoadProvider: watcher.memoryLoad,
+//              batteryStateProvider: watcher.batteryLevel)
     }
     
     var eventsViewModel: Events.ViewModel {

@@ -39,7 +39,7 @@ struct Events: View {
         .navigationTitle("Events")
     }
     
-    private func rowHeader(date: Date, metric: MetricThresholdEvent.Metric) -> some View {
+    private func rowHeader(date: Date, metric: MetricType) -> some View {
         VStack(alignment: .leading) {
             Text("\(metric.rawValue)")
                 .bold()

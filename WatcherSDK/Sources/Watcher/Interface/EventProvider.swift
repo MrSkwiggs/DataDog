@@ -18,7 +18,7 @@ public class EventProvider {
         
     }
     
-    public func register(_ provider: MetricManagerUseCase, for metricType: MetricThresholdEvent.Metric) {
+    public func register(_ provider: MetricManagerUseCase, for metricType: MetricType) {
         eventPublishers.append(provider)
         provider
             .thresholdStatePublisher
@@ -36,7 +36,7 @@ public class EventProvider {
 }
 
 public extension AnyPublisher where Output == MetricThresholdState {
-    func mapToEvent(for metricType: MetricThresholdEvent.Metric) -> AnyPublisher<MetricThresholdEvent, Failure> {
+    func mapToEvent(for metricType: MetricType) -> AnyPublisher<MetricThresholdEvent, Failure> {
         map {
             MetricThresholdEvent(state: $0, metric: metricType)
         }
