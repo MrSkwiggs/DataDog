@@ -17,8 +17,12 @@ extension Events {
         @Published
         var events: [MetricThresholdEvent] = []
         
+        @Published
+        var showsNominalEvents: Bool = false
+        
         init(eventProvider: EventProvider) {
             self.eventProvider = eventProvider
+            self.events = filteredEvents(showNominalEvents: showsNominalEvents)
             
             setupSubscriptions()
         }
@@ -27,10 +31,26 @@ extension Events {
             eventProvider
                 .publisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] event in
-                    self?.events.append(event)
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    self.events = self.filteredEvents(showNominalEvents: self.showsNominalEvents)
                 }
                 .store(in: &subscriptions)
+            
+            $showsNominalEvents
+                .sink { newValue in
+                    self.events = self.filteredEvents(showNominalEvents: newValue)
+                }
+                .store(in: &subscriptions)
+        }
+        
+        private func filteredEvents(showNominalEvents: Bool) -> [MetricThresholdEvent] {
+            eventProvider
+                .events
+                .filter { event in
+                    showNominalEvents ? true : event.state == .exceeded
+                }
+                .reversed()
         }
     }
 }

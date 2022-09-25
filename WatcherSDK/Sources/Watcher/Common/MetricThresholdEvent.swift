@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MetricThresholdEvent: Identifiable, Codable {
+public struct MetricThresholdEvent: Identifiable, Equatable, Codable {
     public let id: String
     public let state: MetricThresholdState
     public let metric: Metric
@@ -22,7 +22,7 @@ public struct MetricThresholdEvent: Identifiable, Codable {
 }
 
 public extension MetricThresholdEvent {
-    enum Metric: String, Codable, CustomStringConvertible, CustomDebugStringConvertible {
+    enum Metric: String, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {
         case cpu = "CPU"
         case memory = "MEM"
         case battery = "BAT"

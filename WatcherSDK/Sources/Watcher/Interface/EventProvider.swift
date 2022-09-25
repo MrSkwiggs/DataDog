@@ -26,11 +26,13 @@ public class EventProvider {
             .sink { [weak self] event in
                 guard let self else { return }
                 self.subject.send(event)
+                self.events.append(event)
             }
             .store(in: &subscriptions)
     }
     
     public lazy var publisher: AnyPublisher<MetricThresholdEvent, Never> = { subject.eraseToAnyPublisher() }()
+    public var events: [MetricThresholdEvent] = []
 }
 
 public extension AnyPublisher where Output == MetricThresholdState {

@@ -15,15 +15,28 @@ struct Events: View {
     
     var body: some View {
         List {
-            ForEach(viewModel.events.reversed()) { event in
-                HStack {
-                    rowHeader(date: event.date,
-                              metric: event.metric)
-                    Spacer()
-                    state(event.state)
+            Section {
+                Toggle("Show Nominal Events", isOn: $viewModel.showsNominalEvents)
+                    .padding(.vertical, 4)
+                    .onTapGesture {
+                        viewModel.showsNominalEvents.toggle()
+                    }
+            }
+            if viewModel.events.isEmpty {
+                Text("No events... yet 🫢")
+            } else {
+                ForEach(viewModel.events) { event in
+                    HStack {
+                        rowHeader(date: event.date,
+                                  metric: event.metric)
+                        Spacer()
+                        state(event.state)
+                    }
                 }
             }
         }
+        .animation(.default, value: viewModel.showsNominalEvents)
+        .navigationTitle("Events")
     }
     
     private func rowHeader(date: Date, metric: MetricThresholdEvent.Metric) -> some View {

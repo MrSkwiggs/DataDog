@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D0771DB28DA321F0022433F /* DataDogWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0771DA28DA321F0022433F /* DataDogWatchApp.swift */; };
-		8D0771DD28DA321F0022433F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0771DC28DA321F0022433F /* ContentView.swift */; };
+		8D0771DD28DA321F0022433F /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0771DC28DA321F0022433F /* RootView.swift */; };
 		8D0771DF28DA32210022433F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0771DE28DA32210022433F /* Assets.xcassets */; };
 		8D0771E228DA32210022433F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0771E128DA32210022433F /* Preview Assets.xcassets */; };
 		8D0771EC28DA32210022433F /* DataDogWatchAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0771EB28DA32210022433F /* DataDogWatchAppTests.swift */; };
@@ -22,6 +22,8 @@
 		8D0D145428DF22970075E192 /* Mock+MetricConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */; };
 		8D4F134928DF7CF400C948A9 /* Events+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */; };
 		8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */; };
+		8D4F135028E0681400C948A9 /* RootView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */; };
+		8D4F135228E06A8300C948A9 /* ViewModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */; };
 		8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */; };
 		8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCE28DA3AA10014C59C /* Mock.swift */; };
 /* End PBXBuildFile section */
@@ -46,7 +48,7 @@
 /* Begin PBXFileReference section */
 		8D0771D728DA321F0022433F /* DataDogApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DataDogApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D0771DA28DA321F0022433F /* DataDogWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDogWatchApp.swift; sourceTree = "<group>"; };
-		8D0771DC28DA321F0022433F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8D0771DC28DA321F0022433F /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		8D0771DE28DA32210022433F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D0771E128DA32210022433F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8D0771E728DA32210022433F /* DataDogAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DataDogAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +63,8 @@
 		8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+MetricConfigurator.swift"; sourceTree = "<group>"; };
 		8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Events+ViewModel.swift"; sourceTree = "<group>"; };
 		8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomEventMetricManager.swift"; sourceTree = "<group>"; };
+		8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView+ViewModel.swift"; sourceTree = "<group>"; };
+		8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProvider.swift; sourceTree = "<group>"; };
 		8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+ViewModel.swift"; sourceTree = "<group>"; };
 		8DA6ECCE28DA3AA10014C59C /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,10 +122,10 @@
 			isa = PBXGroup;
 			children = (
 				8D0771DE28DA32210022433F /* Assets.xcassets */,
-				8D0771DC28DA321F0022433F /* ContentView.swift */,
 				8D0771DA28DA321F0022433F /* DataDogWatchApp.swift */,
 				8D0771E028DA32210022433F /* Preview Content */,
 				8D07720728DA35510022433F /* Scenes */,
+				8D4F135128E06A8300C948A9 /* ViewModelProvider.swift */,
 			);
 			path = DataDogApp;
 			sourceTree = "<group>";
@@ -155,6 +159,7 @@
 		8D07720728DA35510022433F /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				8D4F134E28E067B500C948A9 /* Root */,
 				8DA6ECC628DA39670014C59C /* Metrics */,
 				8D4F134728DF7CE800C948A9 /* Events */,
 			);
@@ -183,6 +188,15 @@
 				8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */,
 			);
 			path = Events;
+			sourceTree = "<group>";
+		};
+		8D4F134E28E067B500C948A9 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				8D0771DC28DA321F0022433F /* RootView.swift */,
+				8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */,
+			);
+			path = Root;
 			sourceTree = "<group>";
 		};
 		8DA6ECC628DA39670014C59C /* Metrics */ = {
@@ -343,8 +357,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D0D145428DF22970075E192 /* Mock+MetricConfigurator.swift in Sources */,
+				8D4F135228E06A8300C948A9 /* ViewModelProvider.swift in Sources */,
 				8D07720D28DA35710022433F /* Events.swift in Sources */,
-				8D0771DD28DA321F0022433F /* ContentView.swift in Sources */,
+				8D0771DD28DA321F0022433F /* RootView.swift in Sources */,
+				8D4F135028E0681400C948A9 /* RootView+ViewModel.swift in Sources */,
 				8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */,
 				8D07720B28DA356B0022433F /* Metrics.swift in Sources */,
 				8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */,

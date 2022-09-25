@@ -1,0 +1,59 @@
+//
+//  RootView+ViewModel.swift
+//  DataDogApp
+//
+//  Created by Dorian Grolaux on 25/09/2022.
+//
+
+import Foundation
+import Combine
+import Watcher
+
+extension RootView {
+    class ViewModel: ObservableObject {
+        private var subscriptions: [AnyCancellable] = []
+        private unowned var eventProvider: EventProvider
+        
+        
+        init(eventProvider: EventProvider) {
+            self.eventProvider = eventProvider
+            
+            setupSubscriptions()
+        }
+        
+        private func setupSubscriptions() {
+            eventProvider
+                .publisher
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    guard self.selectedTab != .events else { return }
+                    self.newEventsCount += 1
+                }
+                .store(in: &subscriptions)
+            
+            $selectedTab
+                .removeDuplicates()
+                .sink { [self] tab in
+                    switch tab {
+                    case .metrics: break
+                    case .events:
+                        newEventsCount = 0
+                    }
+                }
+                .store(in: &subscriptions)
+        }
+        
+        @Published
+        var newEventsCount: Int = 0
+        
+        @Published
+        var selectedTab: Tab = .metrics
+    }
+}
+
+extension RootView.ViewModel {
+    enum Tab: Int {
+        case metrics, events
+    }
+}
