@@ -14,7 +14,6 @@ extension RootView {
         private var subscriptions: [AnyCancellable] = []
         private unowned var eventProvider: EventProvider
         
-        
         init(eventProvider: EventProvider) {
             self.eventProvider = eventProvider
             

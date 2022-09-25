@@ -14,16 +14,16 @@ extension Metrics {
         
         private let cpuLoadProvider: MetricManager
         private let memoryLoadProvider: MetricManager
-        private let batteryStateProvider: MetricManager
+        private let batteryLevelProvider: MetricManager
         
         private var subscriptions: [AnyCancellable] = []
         
         init(cpuLoadProvider: MetricManager,
              memoryLoadProvider: MetricManager,
-             batteryStateProvider: MetricManager) {
+             batteryLevelProvider: MetricManager) {
             self.cpuLoadProvider = cpuLoadProvider
             self.memoryLoadProvider = memoryLoadProvider
-            self.batteryStateProvider = batteryStateProvider
+            self.batteryLevelProvider = batteryLevelProvider
             
             setupSubscriptions()
         }
@@ -60,13 +60,45 @@ extension Metrics {
             memoryLoadProvider
                 .percentagePublisher
                 .receive(on: DispatchQueue.main)
-                .assign(to: \.memoryLoad, on: self)
+                .sink(receiveValue: { [weak self] value in
+                    self?.memoryLoad = value
+                    self?.memoryLoadHistory.append(value)
+                })
                 .store(in: &subscriptions)
             
-            batteryStateProvider
-                .publisher
+            memoryLoadProvider
+                .thresholdPublisher
                 .receive(on: DispatchQueue.main)
-                .assign(to: \.batteryState, on: self)
+                .assign(to: \.memoryLoadThreshold, on: self)
+                .store(in: &subscriptions)
+            
+            memoryLoadProvider
+                .thresholdStatePublisher
+                .receive(on: DispatchQueue.main)
+                .map(\.isExceeding)
+                .assign(to: \.memoryLoadExceededThreshold, on: self)
+                .store(in: &subscriptions)
+            
+            batteryLevelProvider
+                .percentagePublisher
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] value in
+                    self?.batteryLevel = value
+                    self?.batteryLevelHistory.append(value)
+                })
+                .store(in: &subscriptions)
+            
+            batteryLevelProvider
+                .thresholdPublisher
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.batteryLevelThreshold, on: self)
+                .store(in: &subscriptions)
+            
+            batteryLevelProvider
+                .thresholdStatePublisher
+                .receive(on: DispatchQueue.main)
+                .map(\.isExceeding)
+                .assign(to: \.batteryLevelExceededThreshold, on: self)
                 .store(in: &subscriptions)
         }
         
@@ -86,6 +118,24 @@ extension Metrics {
         var memoryLoad: Float = 0
         
         @Published
-        var batteryState: Float = 0
+        var memoryLoadThreshold: Float = 0.25
+        
+        @Published
+        var memoryLoadExceededThreshold: Bool = false
+        
+        @Published
+        var memoryLoadHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
+        
+        @Published
+        var batteryLevel: Float = 0
+        
+        @Published
+        var batteryLevelThreshold: Float = 0.25
+        
+        @Published
+        var batteryLevelExceededThreshold: Bool = false
+        
+        @Published
+        var batteryLevelHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
     }
 }

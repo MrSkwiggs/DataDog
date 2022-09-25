@@ -27,7 +27,6 @@ extension Metrics {
                 }
                 .stroke(Color.green)
             }
-            .border(Color.black.opacity(0.05))
         }
         
         private func segmentSize(maxWidth: CGFloat) -> CGFloat {
