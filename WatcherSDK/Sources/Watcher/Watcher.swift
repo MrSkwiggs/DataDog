@@ -23,10 +23,10 @@ public class Watcher {
         self.eventProvider = eventProvider
     }
     
-    public static func configure(cpuThreshold: Float,
-                                 memoryLoadThreshold: Float,
-                                 batteryLevelThreshold: Float,
-                                 refreshFrequency: TimeInterval) -> Watcher {
+    public static func configure(cpuThreshold: Float = 0.25,
+                                 memoryLoadThreshold: Float = 0.01,
+                                 batteryLevelThreshold: Float = 0.2,
+                                 refreshFrequency: TimeInterval = 1) -> Watcher {
         [cpuThreshold,
          memoryLoadThreshold,
          batteryLevelThreshold]
