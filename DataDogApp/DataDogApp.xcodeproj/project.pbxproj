@@ -21,7 +21,7 @@
 		8D0D145228DF21420075E192 /* Mock+RandomMetricProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0D145128DF21420075E192 /* Mock+RandomMetricProvider.swift */; };
 		8D0D145428DF22970075E192 /* Mock+MetricConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */; };
 		8D4F134928DF7CF400C948A9 /* Events+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */; };
-		8D4F134B28DF7D8B00C948A9 /* Events.ViewModel+Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134A28DF7D8B00C948A9 /* Events.ViewModel+Event.swift */; };
+		8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */; };
 		8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */; };
 		8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCE28DA3AA10014C59C /* Mock.swift */; };
 /* End PBXBuildFile section */
@@ -60,7 +60,7 @@
 		8D0D145128DF21420075E192 /* Mock+RandomMetricProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomMetricProvider.swift"; sourceTree = "<group>"; };
 		8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+MetricConfigurator.swift"; sourceTree = "<group>"; };
 		8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Events+ViewModel.swift"; sourceTree = "<group>"; };
-		8D4F134A28DF7D8B00C948A9 /* Events.ViewModel+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Events.ViewModel+Event.swift"; sourceTree = "<group>"; };
+		8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomEventMetricManager.swift"; sourceTree = "<group>"; };
 		8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+ViewModel.swift"; sourceTree = "<group>"; };
 		8DA6ECCE28DA3AA10014C59C /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -189,7 +189,6 @@
 			children = (
 				8D07720C28DA35710022433F /* Events.swift */,
 				8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */,
-				8D4F134A28DF7D8B00C948A9 /* Events.ViewModel+Event.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -209,6 +208,7 @@
 				8DA6ECCE28DA3AA10014C59C /* Mock.swift */,
 				8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */,
 				8D0D145128DF21420075E192 /* Mock+RandomMetricProvider.swift */,
+				8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -358,7 +358,7 @@
 				8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */,
 				8D4F134928DF7CF400C948A9 /* Events+ViewModel.swift in Sources */,
 				8D0771DB28DA321F0022433F /* DataDogWatchApp.swift in Sources */,
-				8D4F134B28DF7D8B00C948A9 /* Events.ViewModel+Event.swift in Sources */,
+				8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */,
 				8D0D145228DF21420075E192 /* Mock+RandomMetricProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

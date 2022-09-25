@@ -10,20 +10,28 @@ public class Watcher {
     
     public private(set) var batteryLevelConfigurator: MetricProviderConfigurator
     public unowned var batteryLevel: MetricManager { batteryLevelConfigurator.metricManager }
+    
+    public private(set) var eventProvider: EventProvider
 
     private init(cpuLoadConfigurator: CPULoad,
                  memoryLoadConfigurator: MemoryLoad,
-                 batteryLevelConfigurator: BatteryLevel) {
+                 batteryLevelConfigurator: BatteryLevel,
+                 eventProvider: EventProvider) {
         self.cpuLoadConfigurator = cpuLoadConfigurator
         self.memoryLoadConfigurator = memoryLoadConfigurator
         self.batteryLevelConfigurator = batteryLevelConfigurator
+        self.eventProvider = eventProvider
     }
     
     public static func configure(cpuThreshold: Float,
                                  memoryLoadThreshold: Float,
                                  batteryLevelThreshold: Float,
                                  refreshFrequency: TimeInterval) -> Watcher {
-        assertValueClamped(cpuThreshold)
+        [cpuThreshold,
+         memoryLoadThreshold,
+         batteryLevelThreshold]
+            .forEach(assertValueClamped)
+        
         return .default(cpuThreshold: cpuThreshold,
                         memoryLoadThreshold: memoryLoadThreshold,
                         batteryLevelThreshold: batteryLevelThreshold,
@@ -36,21 +44,33 @@ private extension Watcher {
                           memoryLoadThreshold: Float,
                           batteryLevelThreshold: Float,
                           refreshFrequency: TimeInterval) -> Watcher {
+        let eventProvider = EventProvider()
+        
         let cpuLoadQueue = DispatchQueue(label: "cpu-load",
                                          qos: .background)
+        let cpuLoad = CPULoad(threshold: cpuThreshold,
+                              refreshFrequency: refreshFrequency,
+                              queue: cpuLoadQueue)
+        eventProvider.register(cpuLoad.metricManager, for: .cpu)
+        
         let memoryLoadQueue = DispatchQueue(label: "memory-load",
                                          qos: .background)
+        let memoryLoad = MemoryLoad(threshold: memoryLoadThreshold,
+                                    refreshFrequency: refreshFrequency,
+                                    queue: memoryLoadQueue)
+        eventProvider.register(memoryLoad.metricManager, for: .memory)
+        
         let batteryLevelQueue = DispatchQueue(label: "battery-level",
                                             qos: .background)
-        return .init(cpuLoadConfigurator: CPULoad(threshold: cpuThreshold,
-                                                  refreshFrequency: refreshFrequency,
-                                                  queue: cpuLoadQueue),
-                     memoryLoadConfigurator: .init(threshold: memoryLoadThreshold,
-                                                   refreshFrequency: refreshFrequency,
-                                                   queue: memoryLoadQueue),
-                     batteryLevelConfigurator: .init(threshold: batteryLevelThreshold,
-                                                     refreshFrequency: refreshFrequency,
-                                                     queue: batteryLevelQueue))
+        let batteryLevel = BatteryLevel(threshold: batteryLevelThreshold,
+                                        refreshFrequency: refreshFrequency,
+                                        queue: batteryLevelQueue)
+        eventProvider.register(batteryLevel.metricManager, for: .battery)
+        
+        return .init(cpuLoadConfigurator: cpuLoad,
+                     memoryLoadConfigurator: memoryLoad,
+                     batteryLevelConfigurator: batteryLevel,
+                     eventProvider: eventProvider)
     }
 }
 

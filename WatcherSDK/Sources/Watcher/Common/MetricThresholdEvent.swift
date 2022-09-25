@@ -22,7 +22,19 @@ public struct MetricThresholdEvent: Identifiable, Codable {
 }
 
 public extension MetricThresholdEvent {
-    enum Metric: Codable {
-        case cpu, memory, battery
+    enum Metric: String, Codable, CustomStringConvertible, CustomDebugStringConvertible {
+        case cpu = "CPU"
+        case memory = "MEM"
+        case battery = "BAT"
+        
+        public var description: String {
+            switch self {
+            case .cpu: return "CPU Usage"
+            case .memory: return "Memory Usage"
+            case .battery: return "Battery Level"
+            }
+        }
+        
+        public var debugDescription: String { rawValue }
     }
 }

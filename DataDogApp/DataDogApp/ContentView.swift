@@ -28,7 +28,7 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemSymbol: .gaugeMedium)
                 }
-            Events()
+            Events(viewModel: .init(eventProvider:  ContentView.watcher.eventProvider))
                 .badge(2)
                 .tabItem {
                     Image(systemSymbol: .listDash)
