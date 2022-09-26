@@ -54,10 +54,11 @@ struct ThresholdEditor: View {
                 Spacer()
             }
             HStack {
-                Text("Threshold: ")
-                TextField("", value: $threshold, formatter: formatter)
-                    .textFieldStyle(.roundedBorder)
-                    .keyboardType(.decimalPad)
+                Spacer()
+                Text("\(threshold * 100, specifier: "%1.0f")%")
+                    .font(.largeTitle)
+                    .bold()
+                Spacer()
             }
             
             Spacer()
@@ -70,16 +71,6 @@ struct ThresholdEditor: View {
                     Text("Submit")
                 }
                 .branded(.regular)
-                
-                Button {
-                    threshold = initialValue
-                    completion()
-                } label: {
-                    Text("Cancel")
-                        .padding()
-                }
-                .branded(.transparent.in(.ui(.danger)))
-
             }
         }
         .padding()

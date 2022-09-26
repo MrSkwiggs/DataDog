@@ -14,6 +14,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
     /// The metric has reached and exceeded its allotted threshold value range
     case exceeded(value: Float, percentage: Float)
     
+    // Override the default implementation as we don't care about the actual values for equality checks
     public static func ==(_ lhs: Self, _ rhs: Self) -> Bool {
         lhs.isExceeding == rhs.isExceeding
     }
@@ -28,6 +29,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
         }
     }
     
+    /// The metric value associated with this state
     public var value: Float {
         switch self {
         case .nominal(let value, _),
@@ -36,6 +38,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
         }
     }
     
+    /// The metric value associated with this state, expressed as a percentage of its min & max range
     public var percentage: Float {
         switch self {
         case .nominal(_, let percentage),
