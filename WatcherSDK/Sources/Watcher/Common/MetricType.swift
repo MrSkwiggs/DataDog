@@ -7,10 +7,15 @@
 
 import Foundation
 
-public enum MetricType: String, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {
+public enum MetricType: String, Identifiable, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {
+    
     case cpu = "CPU"
     case memory = "MEM"
     case battery = "BAT"
+    
+    public var id: String {
+        rawValue
+    }
     
     public var description: String {
         switch self {

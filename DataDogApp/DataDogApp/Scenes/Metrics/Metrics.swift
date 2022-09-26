@@ -18,29 +18,52 @@ struct Metrics: View {
     var body: some View {
         
         LazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.fixed(200))]) {
-            Metric(title: MetricType.cpu.description,
-                   gaugeName: MetricType.cpu.rawValue,
-                   value: viewModel.cpuLoad,
-                   threshold: viewModel.cpuLoadThreshold,
-                   isExceedingThreshold: viewModel.cpuLoadExceededThreshold,
-                   history: viewModel.cpuLoadHistory)
             
-            Metric(title: MetricType.memory.description,
-                   gaugeName: MetricType.memory.rawValue,
-                   value: viewModel.memoryLoad,
-                   threshold: viewModel.memoryLoadThreshold,
-                   isExceedingThreshold: viewModel.memoryLoadExceededThreshold,
-                   history: viewModel.memoryLoadHistory)
+            cpuMetric
+                .onTapGesture {
+                    viewModel.userDidTapMetric(.cpu)
+                }
             
-            Metric(title: MetricType.battery.description,
-                   gaugeName: MetricType.battery.rawValue,
-                   value: viewModel.batteryLevel,
-                   threshold: viewModel.batteryLevelThreshold,
-                   isExceedingThreshold: viewModel.batteryLevelExceededThreshold,
-                   history: viewModel.batteryLevelHistory,
-                   isRangeInversed: true)
+            memoryMetric
+            
+            batteryMetric
         }
+        .sheet(item: $viewModel.metricTypeThresholdEditor, content: { metric in
+            ThresholdEditor(threshold: $viewModel.cpuLoadThreshold,
+                                  metricType: metric) {
+                viewModel.userDidFinishEditingThreshold()
+            }
+                                  .presentationDetents([.medium])
+        })
         .navigationTitle("Metrics")
+    }
+    
+    private var cpuMetric: some View {
+        Metric(title: MetricType.cpu.description,
+               gaugeName: MetricType.cpu.rawValue,
+               value: viewModel.cpuLoad,
+               threshold: viewModel.cpuLoadThreshold,
+               isExceedingThreshold: viewModel.cpuLoadExceededThreshold,
+               history: viewModel.cpuLoadHistory)
+    }
+    
+    private var memoryMetric: some View {
+        Metric(title: MetricType.memory.description,
+               gaugeName: MetricType.memory.rawValue,
+               value: viewModel.memoryLoad,
+               threshold: viewModel.memoryLoadThreshold,
+               isExceedingThreshold: viewModel.memoryLoadExceededThreshold,
+               history: viewModel.memoryLoadHistory)
+    }
+    
+    private var batteryMetric: some View {
+        Metric(title: MetricType.battery.description,
+               gaugeName: MetricType.battery.rawValue,
+               value: viewModel.batteryLevel,
+               threshold: viewModel.batteryLevelThreshold,
+               isExceedingThreshold: viewModel.batteryLevelExceededThreshold,
+               history: viewModel.batteryLevelHistory,
+               isRangeInversed: true)
     }
 }
 

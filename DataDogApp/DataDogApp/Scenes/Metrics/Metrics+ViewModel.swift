@@ -137,5 +137,16 @@ extension Metrics {
         
         @Published
         var batteryLevelHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
+        
+        @Published
+        var metricTypeThresholdEditor: MetricType?
+        
+        func userDidTapMetric(_ metric: MetricType) {
+            self.metricTypeThresholdEditor = metric
+        }
+        
+        func userDidFinishEditingThreshold() {
+            self.metricTypeThresholdEditor = nil
+        }
     }
 }

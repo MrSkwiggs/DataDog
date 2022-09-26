@@ -30,6 +30,8 @@
 		8D4F135F28E09FB900C948A9 /* Mock+ChartValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135E28E09FB900C948A9 /* Mock+ChartValues.swift */; };
 		8D4F136028E0A07400C948A9 /* Metrics+Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F135A28E0963000C948A9 /* Metrics+Chart.swift */; };
 		8D4F136228E0AC5A00C948A9 /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136128E0AC5A00C948A9 /* Color+Brand.swift */; };
+		8D4F136428E0AF4D00C948A9 /* ThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136328E0AF4D00C948A9 /* ThresholdEditor.swift */; };
+		8D4F136828E0B01800C948A9 /* BrandedButtonStyle .swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136728E0B01800C948A9 /* BrandedButtonStyle .swift */; };
 		8DA6ECC828DA39730014C59C /* Metrics+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */; };
 		8DA6ECCF28DA3AA10014C59C /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6ECCE28DA3AA10014C59C /* Mock.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +79,8 @@
 		8D4F135A28E0963000C948A9 /* Metrics+Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+Chart.swift"; sourceTree = "<group>"; };
 		8D4F135E28E09FB900C948A9 /* Mock+ChartValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+ChartValues.swift"; sourceTree = "<group>"; };
 		8D4F136128E0AC5A00C948A9 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
+		8D4F136328E0AF4D00C948A9 /* ThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThresholdEditor.swift; sourceTree = "<group>"; };
+		8D4F136728E0B01800C948A9 /* BrandedButtonStyle .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrandedButtonStyle .swift"; sourceTree = "<group>"; };
 		8DA6ECC728DA39730014C59C /* Metrics+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metrics+ViewModel.swift"; sourceTree = "<group>"; };
 		8DA6ECCE28DA3AA10014C59C /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,9 +176,11 @@
 		8D07720728DA35510022433F /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				8D4F136628E0AFF600C948A9 /* Common */,
 				8D4F134E28E067B500C948A9 /* Root */,
 				8DA6ECC628DA39670014C59C /* Metrics */,
 				8D4F134728DF7CE800C948A9 /* Events */,
+				8D4F136528E0AF6500C948A9 /* Threshold */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -219,6 +225,22 @@
 				8D4F136128E0AC5A00C948A9 /* Color+Brand.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8D4F136528E0AF6500C948A9 /* Threshold */ = {
+			isa = PBXGroup;
+			children = (
+				8D4F136328E0AF4D00C948A9 /* ThresholdEditor.swift */,
+			);
+			path = Threshold;
+			sourceTree = "<group>";
+		};
+		8D4F136628E0AFF600C948A9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8D4F136728E0B01800C948A9 /* BrandedButtonStyle .swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		8DA6ECC628DA39670014C59C /* Metrics */ = {
@@ -387,6 +409,7 @@
 				8D4F135228E06A8300C948A9 /* ViewModelProvider.swift in Sources */,
 				8D4F136228E0AC5A00C948A9 /* Color+Brand.swift in Sources */,
 				8D4F135428E0845400C948A9 /* Metrics.Metric+Gauge.swift in Sources */,
+				8D4F136828E0B01800C948A9 /* BrandedButtonStyle .swift in Sources */,
 				8D07720D28DA35710022433F /* Events.swift in Sources */,
 				8D0771DD28DA321F0022433F /* RootView.swift in Sources */,
 				8D4F135928E08F2B00C948A9 /* Metrics+Metric.swift in Sources */,
@@ -398,6 +421,7 @@
 				8D4F134928DF7CF400C948A9 /* Events+ViewModel.swift in Sources */,
 				8D0771DB28DA321F0022433F /* DataDogWatchApp.swift in Sources */,
 				8D4F134D28E0578700C948A9 /* Mock+RandomEventMetricManager.swift in Sources */,
+				8D4F136428E0AF4D00C948A9 /* ThresholdEditor.swift in Sources */,
 				8D4F135F28E09FB900C948A9 /* Mock+ChartValues.swift in Sources */,
 				8D0D145228DF21420075E192 /* Mock+RandomMetricProvider.swift in Sources */,
 			);
