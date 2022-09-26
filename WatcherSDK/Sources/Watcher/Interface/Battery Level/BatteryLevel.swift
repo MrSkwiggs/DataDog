@@ -8,7 +8,7 @@
 import Foundation
 
 /// Implementation of the battery level provider
-public class BatteryLevel: MetricProviderConfigurator {
+public class BatteryLevel: MetricManagerConfigurator {
     internal init(threshold: Float, refreshFrequency: TimeInterval, queue: DispatchQueue) {
         super.init(metricProvider: BatteryWatcher(),
                    threshold: threshold,

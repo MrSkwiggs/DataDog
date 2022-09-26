@@ -22,11 +22,14 @@ open class MetricManager: MetricManagerUseCase {
     /// The metric's threshold subject, used a `private(set)` accessor
     private let thresholdSubject: CurrentValueSubject<Float, Never>
     
+    /// The metrics threshold range subject, used a `private(set)` accessor
+    private let thresholdRangeSubject: CurrentValueSubject<MetricThresholdRange, Never>
+    
     /// The metric's threshold events subject, used as a `private(set)` accessor
     private let thresholdEventSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal)
     
-    /// The metric's threshold range
-    internal private(set) var thresholdRange: MetricThresholdRange = .lower
+    /// The refresh frequency subject, used a `private(set)` accessor
+    private let refreshFrequencySubject: CurrentValueSubject<TimeInterval, Never>
     
     /// This manager's background timer, used to repeatedly fetch the metric & publish its values
     private lazy var timer: BackgroundTimer = { makeAndScheduleTimer() }()
@@ -55,7 +58,6 @@ open class MetricManager: MetricManagerUseCase {
             do {
                 let newValue = try self.metricProvider.fetchMetric()
                 self.metricSubject.send(newValue)
-                self.history.append(newValue)
                 self.computeThresholdState(for: newValue)
             } catch {
                 // TODO: needs more thorough error handling, but eventually if this fails it's not worth crashing
@@ -76,15 +78,15 @@ open class MetricManager: MetricManagerUseCase {
                   queue: DispatchQueue) {
         self.metricProvider = metricProvider
         self.thresholdSubject = .init(threshold)
-        self.thresholdRange = thresholdRange
-        self.refreshFrequency = refreshFrequency
+        self.thresholdRangeSubject = .init(thresholdRange)
+        self.refreshFrequencySubject = .init(refreshFrequency)
         self.queue = queue
         self.timer.resume()
     }
     
     internal func set(threshold: Float, range: MetricThresholdRange) {
         // set the range first, as threshold events are re-calculated after mutating the threshold
-        self.thresholdRange = range
+        self.thresholdRangeSubject.send(range)
         self.thresholdSubject.send(threshold)
     }
     
@@ -99,20 +101,31 @@ open class MetricManager: MetricManagerUseCase {
             .compactMap { [weak self] value in
                 guard let self else { return nil }
                 let Limits = type(of: self.metricProvider)
-                let newValue = value / Limits.maxValue
-                self.percentageHistory.append(newValue)
-                return newValue
+                return value / Limits.maxValue
             }
             .eraseToAnyPublisher()
     }()
     
+    public var threshold: Float {
+        get { thresholdSubject.value }
+        set { thresholdSubject.send(newValue) }
+    }
     public private(set) lazy var thresholdPublisher: AnyPublisher<Float, Never> = {
         thresholdSubject.eraseToAnyPublisher()
+    }()
+    public var thresholdRange: MetricThresholdRange { thresholdRangeSubject.value }
+    public private(set) lazy var thresholdRangePublisher: AnyPublisher<MetricThresholdRange, Never> = {
+        thresholdRangeSubject.eraseToAnyPublisher()
     }()
     public private(set) lazy var thresholdStatePublisher: AnyPublisher<MetricThresholdState, Never> = {
         thresholdEventSubject.eraseToAnyPublisher()
     }()
-    public internal(set) var refreshFrequency: TimeInterval
-    public private(set) var history: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
-    public private(set) var percentageHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
+    
+    public var refreshFrequency: TimeInterval {
+        get { refreshFrequencySubject.value }
+        set { refreshFrequencySubject.send(newValue) }
+    }
+    public private(set) lazy var refreshFrequencyPublisher: AnyPublisher<TimeInterval, Never> = {
+        refreshFrequencySubject.eraseToAnyPublisher()
+    }()
 }

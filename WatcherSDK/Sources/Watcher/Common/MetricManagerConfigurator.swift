@@ -1,5 +1,5 @@
 //
-//  MetricProviderConfigurator.swift
+//  MetricManagerConfigurator.swift
 //  
 //
 //  Created by Dorian Grolaux on 24/09/2022.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Handles a `MetricProvider` by building a `MetricManager` and offering various configuration controls over it.
-open class MetricProviderConfigurator: MetricManagerConfiguratorUseCase {
+open class MetricManagerConfigurator: MetricManagerConfiguratorUseCase {
     
     // MARK: - Public
     

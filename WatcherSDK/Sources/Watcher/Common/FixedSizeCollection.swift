@@ -7,9 +7,13 @@
 
 import Foundation
 
+/// A Collection that has a fixed capacity
+///
+/// When adding elements beyond the collection's `maxCount` of elements, the first element is automatically removed to make room.
 public struct FixedSizeCollection<Element> {
     
     private var elements: [Element]
+    /// The maximum amount of items this collection can hold at any given time
     public var maxCount: Int
     
     public init(elements: [Element] = [], maxCount: Int) {

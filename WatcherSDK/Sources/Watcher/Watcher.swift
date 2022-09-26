@@ -2,13 +2,13 @@ import Foundation
 
 public class Watcher {
     
-    public private(set) var cpuLoadConfigurator: MetricProviderConfigurator
+    public private(set) var cpuLoadConfigurator: MetricManagerConfigurator
     public unowned var cpuLoad: MetricManager { cpuLoadConfigurator.metricManager }
 
-    public private(set) var memoryLoadConfigurator: MetricProviderConfigurator
+    public private(set) var memoryLoadConfigurator: MetricManagerConfigurator
     public unowned var memoryLoad: MetricManager { memoryLoadConfigurator.metricManager }
     
-    public private(set) var batteryLevelConfigurator: MetricProviderConfigurator
+    public private(set) var batteryLevelConfigurator: MetricManagerConfigurator
     public unowned var batteryLevel: MetricManager { batteryLevelConfigurator.metricManager }
     
     public private(set) var eventProvider: EventProvider

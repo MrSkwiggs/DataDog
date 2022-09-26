@@ -9,7 +9,7 @@ import Foundation
 import Watcher
 
 extension Mock {
-    class MetricConfigurator: MetricProviderConfigurator {
+    class MetricConfigurator: MetricManagerConfigurator {
         init(initialValue: Float = 0.0, threshold: Float = 0.5, refreshFrequency: TimeInterval = 1) {
             super.init(metricProvider: RandomMetricProvider(),
                        threshold: threshold,
