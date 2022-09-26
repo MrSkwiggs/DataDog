@@ -63,6 +63,7 @@ open class MetricManager: MetricManagerUseCase {
                 // TODO: needs more thorough error handling, but eventually if this fails it's not worth crashing
                 // just handle silently (don't emit, but log) for now
                 print("Unhandled Metric Manager error: \(error)")
+                self.timer.suspend()
             }
         }
         timer.resume()

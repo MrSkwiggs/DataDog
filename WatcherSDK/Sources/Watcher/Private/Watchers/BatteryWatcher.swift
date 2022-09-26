@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+/// Fetches the device's current battery level
 class BatteryWatcher: MetricProviderUseCase {
     static let minValue: Float = 0
     static let maxValue: Float = 1
