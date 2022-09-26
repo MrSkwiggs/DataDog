@@ -20,9 +20,9 @@ class ViewModelProvider: ObservableObject {
     }
     
     var metricsViewModel: Metrics.ViewModel {
-        .init(cpuLoadProvider: watcher.cpuLoad,
-              memoryLoadProvider: watcher.memoryLoad,
-              batteryLevelProvider: watcher.batteryLevel)
+        .init(cpuLoadManager: watcher.cpuLoadManager,
+              memoryLoadManager: watcher.memoryLoadManager,
+              batteryLevelManager: watcher.batteryLevelManager)
 //        .init(cpuLoadProvider: Mock.MetricConfigurator(initialValue: 0,
 //                                                       threshold: 1,
 //                                                       refreshFrequency: 1.0 / 60.0).metricManager,

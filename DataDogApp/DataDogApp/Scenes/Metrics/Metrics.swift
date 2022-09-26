@@ -10,10 +10,24 @@ import Watcher
 
 struct Metrics: View {
     
-    
-    
     @StateObject
     var viewModel: ViewModel
+    
+    @StateObject
+    private var cpuLoad: ViewModel.MetricWrapper
+    
+    @StateObject
+    private var memoryLoad: ViewModel.MetricWrapper
+    
+    @StateObject
+    private var batteryLevel: ViewModel.MetricWrapper
+    
+    init(viewModel: ViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+        self._cpuLoad = .init(wrappedValue: viewModel.cpuLoad)
+        self._memoryLoad = .init(wrappedValue: viewModel.memoryLoad)
+        self._batteryLevel = .init(wrappedValue: viewModel.batteryLevel)
+    }
     
     var body: some View {
         
@@ -25,12 +39,18 @@ struct Metrics: View {
                 }
             
             memoryMetric
+                .onTapGesture {
+                    viewModel.userDidTapMetric(.memory)
+                }
             
             batteryMetric
+                .onTapGesture {
+                    viewModel.userDidTapMetric(.battery)
+                }
         }
-        .sheet(item: $viewModel.metricTypeThresholdEditor, content: { metric in
-            ThresholdEditor(threshold: $viewModel.cpuLoadThreshold,
-                                  metricType: metric) {
+        .sheet(item: $viewModel.editorWrapper, content: { editor in
+            ThresholdEditor(threshold: .init(get: editor.get, set: editor.set),
+                            metricType: editor.metricType) {
                 viewModel.userDidFinishEditingThreshold()
             }
                                   .presentationDetents([.medium])
@@ -41,42 +61,42 @@ struct Metrics: View {
     private var cpuMetric: some View {
         Metric(title: MetricType.cpu.description,
                gaugeName: MetricType.cpu.rawValue,
-               value: viewModel.cpuLoad,
-               threshold: viewModel.cpuLoadThreshold,
-               isExceedingThreshold: viewModel.cpuLoadExceededThreshold,
-               history: viewModel.cpuLoadHistory)
+               value: viewModel.cpuLoad.metricPercentage,
+               threshold: viewModel.cpuLoad.metricThreshold,
+               isExceedingThreshold: viewModel.cpuLoad.metricExceededThreshold,
+               history: viewModel.cpuLoad.metricHistory)
     }
     
     private var memoryMetric: some View {
         Metric(title: MetricType.memory.description,
                gaugeName: MetricType.memory.rawValue,
-               value: viewModel.memoryLoad,
-               threshold: viewModel.memoryLoadThreshold,
-               isExceedingThreshold: viewModel.memoryLoadExceededThreshold,
-               history: viewModel.memoryLoadHistory)
+               value: viewModel.memoryLoad.metricPercentage,
+               threshold: viewModel.memoryLoad.metricThreshold,
+               isExceedingThreshold: viewModel.memoryLoad.metricExceededThreshold,
+               history: viewModel.memoryLoad.metricHistory)
     }
     
     private var batteryMetric: some View {
         Metric(title: MetricType.battery.description,
                gaugeName: MetricType.battery.rawValue,
-               value: viewModel.batteryLevel,
-               threshold: viewModel.batteryLevelThreshold,
-               isExceedingThreshold: viewModel.batteryLevelExceededThreshold,
-               history: viewModel.batteryLevelHistory,
+               value: viewModel.batteryLevel.metricPercentage,
+               threshold: viewModel.batteryLevel.metricThreshold,
+               isExceedingThreshold: viewModel.batteryLevel.metricExceededThreshold,
+               history: viewModel.batteryLevel.metricHistory,
                isRangeInversed: true)
     }
 }
 
 struct Metrics_Previews: PreviewProvider {
     
-    static let cpuLoadConfigurator = Mock.MetricConfigurator()
-    static let memoryLoadConfigurator = Mock.MetricConfigurator()
-    static let batteryLevel = Mock.MetricConfigurator()
+    static let cpuLoadManager = Mock.metricManager()
+    static let memoryLoadManager = Mock.metricManager()
+    static let batteryLevelManager = Mock.metricManager()
     
     static let metricsViewModel: Metrics.ViewModel =
-        .init(cpuLoadProvider: cpuLoadConfigurator.metricManager,
-              memoryLoadProvider: memoryLoadConfigurator.metricManager,
-              batteryLevelProvider: batteryLevel.metricManager)
+        .init(cpuLoadManager: cpuLoadManager,
+              memoryLoadManager: memoryLoadManager,
+              batteryLevelManager: batteryLevelManager)
     static var previews: some View {
         Metrics(viewModel: metricsViewModel)
     }

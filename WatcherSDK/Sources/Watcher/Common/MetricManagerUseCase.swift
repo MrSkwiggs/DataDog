@@ -17,6 +17,8 @@ public protocol MetricManagerUseCase: AnyObject {
     var percentagePublisher: AnyPublisher<Float, Never> { get }
     
     /// This provider's threshold
+    ///
+    /// - important: Changes to the threshold don't take immediate effect. The threshold state and potential events are only recalculated the next time the metric is refreshed (which depends on `refreshFrequency`)
     var threshold: Float { get set }
     /// This provider's threshold value publisher
     var thresholdPublisher: AnyPublisher<Float, Never> { get }

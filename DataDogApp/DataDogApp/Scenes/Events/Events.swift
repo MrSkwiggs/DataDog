@@ -28,7 +28,8 @@ struct Events: View {
                 ForEach(viewModel.events) { event in
                     HStack {
                         rowHeader(date: event.date,
-                                  metric: event.metric)
+                                  metric: event.metricType,
+                                  percentage: event.state.percentage)
                         Spacer()
                         state(event.state)
                     }
@@ -39,10 +40,15 @@ struct Events: View {
         .navigationTitle("Events")
     }
     
-    private func rowHeader(date: Date, metric: MetricType) -> some View {
+    private func rowHeader(date: Date,
+                           metric: MetricType,
+                           percentage: Float) -> some View {
         VStack(alignment: .leading) {
-            Text("\(metric.rawValue)")
-                .bold()
+            HStack {
+                Text("\(metric.rawValue)")
+                    .bold()
+                Text("- \(percentage * 100, specifier: "%0.0f")%")
+            }
             Text(date, style: .relative) + Text(" ago")
         }
     }

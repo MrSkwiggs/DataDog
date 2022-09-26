@@ -26,7 +26,7 @@ open class MetricManager: MetricManagerUseCase {
     private let thresholdRangeSubject: CurrentValueSubject<MetricThresholdRange, Never>
     
     /// The metric's threshold events subject, used as a `private(set)` accessor
-    private let thresholdEventSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal)
+    private let thresholdEventSubject: CurrentValueSubject<MetricThresholdState, Never> = .init(.nominal(value: 0, percentage: 0))
     
     /// The refresh frequency subject, used a `private(set)` accessor
     private let refreshFrequencySubject: CurrentValueSubject<TimeInterval, Never>
@@ -69,25 +69,17 @@ open class MetricManager: MetricManagerUseCase {
         return timer
     }
     
-    // MARK: - Internal
-    
-    internal init(metricProvider: any MetricProviderUseCase,
-                  threshold: Float = 0.5,
-                  thresholdRange: MetricThresholdRange = .lower,
-                  refreshFrequency: TimeInterval = 1,
-                  queue: DispatchQueue) {
+    public init(metricProvider: any MetricProviderUseCase,
+                       threshold: Float = 0.5,
+                       thresholdRange: MetricThresholdRange = .lower,
+                       refreshFrequency: TimeInterval = 1,
+                       queue: DispatchQueue) {
         self.metricProvider = metricProvider
         self.thresholdSubject = .init(threshold)
         self.thresholdRangeSubject = .init(thresholdRange)
         self.refreshFrequencySubject = .init(refreshFrequency)
         self.queue = queue
         self.timer.resume()
-    }
-    
-    internal func set(threshold: Float, range: MetricThresholdRange) {
-        // set the range first, as threshold events are re-calculated after mutating the threshold
-        self.thresholdRangeSubject.send(range)
-        self.thresholdSubject.send(threshold)
     }
     
     // MARK: - Protocol Conformance

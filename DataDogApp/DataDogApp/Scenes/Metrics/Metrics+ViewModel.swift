@@ -12,31 +12,45 @@ import Watcher
 extension Metrics {
     class ViewModel: ObservableObject {
         
-        private let cpuLoadProvider: MetricWrapper
-        private let memoryLoadProvider: MetricWrapper
-        private let batteryLevelProvider: MetricWrapper
-        
         private var subscriptions: [AnyCancellable] = []
         
-        init(cpuLoadProvider: any MetricManagerConfiguratorUseCase,
-             memoryLoadProvider: any MetricManagerConfiguratorUseCase,
-             batteryLevelProvider: any MetricManagerConfiguratorUseCase) {
-            self.cpuLoadProvider = .init(configurator: cpuLoadProvider)
-            self.memoryLoadProvider = .init(configurator: memoryLoadProvider)
-            self.batteryLevelProvider = .init(configurator: batteryLevelProvider)
-            
-            setupSubscriptions()
+        init(cpuLoadManager: any MetricManagerUseCase,
+             memoryLoadManager: any MetricManagerUseCase,
+             batteryLevelManager: any MetricManagerUseCase) {
+            self.cpuLoad = .init(manager: cpuLoadManager)
+            self.memoryLoad = .init(manager: memoryLoadManager)
+            self.batteryLevel = .init(manager: batteryLevelManager)
         }
         
         @Published
-        var metricTypeThresholdEditor: MetricType?
+        var cpuLoad: MetricWrapper
+        @Published
+        var memoryLoad: MetricWrapper
+        @Published
+        var batteryLevel: MetricWrapper
+        
+        @Published
+        var editorWrapper: EditorWrapper?
         
         func userDidTapMetric(_ metric: MetricType) {
-            self.metricTypeThresholdEditor = metric
+            let wrapper: MetricWrapper
+            switch metric {
+            case .cpu:
+                wrapper = cpuLoad
+            case .memory:
+                wrapper = memoryLoad
+            case .battery:
+                wrapper = batteryLevel
+            }
+            self.editorWrapper = .init(metricType: metric, get: {
+                wrapper.metricThreshold
+            }, set: { value in
+                wrapper.set(threshold: value)
+            })
         }
         
         func userDidFinishEditingThreshold() {
-            self.metricTypeThresholdEditor = nil
+            self.editorWrapper = nil
         }
     }
 }
@@ -44,18 +58,17 @@ extension Metrics {
 extension Metrics.ViewModel {
     class MetricWrapper: ObservableObject {
         
-        private let configurator: any MetricManagerConfiguratorUseCase
-        private var subscriptions: [AnyCancellable]
+        private let manager: any MetricManagerUseCase
+        private var subscriptions: [AnyCancellable] = []
         
-        init(configurator: any MetricManagerConfiguratorUseCase) {
-            self.configurator = configurator
+        init(manager: any MetricManagerUseCase) {
+            self.manager = manager
             
             setupSubscriptions()
         }
         
         private func setupSubscriptions() {
-            configurator
-                .metricManager
+            manager
                 .percentagePublisher
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] value in
@@ -64,15 +77,13 @@ extension Metrics.ViewModel {
                 })
                 .store(in: &subscriptions)
             
-            configurator
-                .metricManager
+            manager
                 .thresholdPublisher
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.metricThreshold, on: self)
                 .store(in: &subscriptions)
             
-            configurator
-                .metricManager
+            manager
                 .thresholdStatePublisher
                 .receive(on: DispatchQueue.main)
                 .map(\.isExceeding)
@@ -93,7 +104,16 @@ extension Metrics.ViewModel {
         var metricHistory: FixedSizeCollection<Float> = .init(repeating: 0, count: 30)
         
         func set(threshold: Float) {
-            configurator.set(threshold: threshold, range: configurator.metricManager.range)
+            manager.threshold = threshold
         }
+    }
+}
+
+extension Metrics.ViewModel {
+    struct EditorWrapper: Identifiable {
+        let id: String = UUID().uuidString
+        let metricType: MetricType
+        let get: () -> Float
+        let set: (Float) -> Void
     }
 }

@@ -48,7 +48,7 @@ extension Events {
             eventProvider
                 .events
                 .filter { event in
-                    showNominalEvents ? true : event.state == .exceeded
+                    showNominalEvents ? true : event.state.isExceeding
                 }
                 .reversed()
         }

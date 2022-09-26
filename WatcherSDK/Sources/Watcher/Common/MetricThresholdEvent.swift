@@ -10,13 +10,13 @@ import Foundation
 public struct MetricThresholdEvent: Identifiable, Equatable, Codable {
     public let id: String
     public let state: MetricThresholdState
-    public let metric: MetricType
+    public let metricType: MetricType
     public let date: Date
     
-    internal init(state: MetricThresholdState, metric: MetricType) {
+    internal init(state: MetricThresholdState, metricType: MetricType) {
         self.id = UUID().uuidString
         self.state = state
-        self.metric = metric
+        self.metricType = metricType
         self.date = Date()
     }
 }

@@ -36,9 +36,10 @@ public class EventProvider {
 }
 
 public extension AnyPublisher where Output == MetricThresholdState {
-    func mapToEvent(for metricType: MetricType) -> AnyPublisher<MetricThresholdEvent, Failure> {
+    func mapToEvent(for type: MetricType) -> AnyPublisher<MetricThresholdEvent, Failure> {
         map {
-            MetricThresholdEvent(state: $0, metric: metricType)
+            MetricThresholdEvent(state: $0,
+                                 metricType: type)
         }
         .eraseToAnyPublisher()
     }

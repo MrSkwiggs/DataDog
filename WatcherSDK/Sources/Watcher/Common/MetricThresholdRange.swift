@@ -28,20 +28,21 @@ public enum MetricThresholdRange: Codable {
 public extension MetricThresholdRange {
     /// Computes the threshold state from the given metric & threshold values.
     func mapToState(_ metric: Float, on Limits: MetricProviderUseCase.Type, threshold: Float) -> MetricThresholdState {
+        let percentage = metric / Limits.maxValue
         switch self {
         case .lower:
             guard Limits.minValue <= metric && metric < threshold * Limits.maxValue else {
-                return .exceeded
+                return .exceeded(value: metric, percentage: percentage)
             }
             
-            return .nominal
+            return .nominal(value: metric, percentage: percentage)
             
         case .upper:
             guard threshold * Limits.maxValue < metric && metric <= Limits.maxValue else {
-                return .exceeded
+                return .exceeded(value: metric, percentage: percentage)
             }
             
-            return .nominal
+            return .nominal(value: metric, percentage: percentage)
         }
     }
 }

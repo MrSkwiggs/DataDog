@@ -8,7 +8,7 @@
 import Foundation
 
 /// Implementation of the memory load provider
-public class MemoryLoad: MetricManagerConfigurator {
+public class MemoryLoad: MetricManager {
     internal init(threshold: Float, refreshFrequency: TimeInterval, queue: DispatchQueue) {
         super.init(metricProvider: MemoryLoadWatcher(),
                    threshold: threshold,
