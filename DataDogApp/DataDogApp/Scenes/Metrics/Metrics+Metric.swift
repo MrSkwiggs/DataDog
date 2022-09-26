@@ -48,8 +48,14 @@ extension Metrics {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.ui(.disabled))
+                    .stroke(isExceedingThreshold
+                            ? Color.ui(.danger)
+                            : Color.ui(.disabled),
+                            lineWidth: isExceedingThreshold
+                            ? 2
+                            : 1)
             )
+            .animation(.default, value: isExceedingThreshold)
         }
     }
 }
