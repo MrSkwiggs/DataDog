@@ -59,6 +59,8 @@ Here is an example of such notifications:
 
 The app does not to persist any data (such as user threshold selection or events). This was a conscious decision, but because the app is written in a way that permits dependency injection, implementing this would not be too much work.
 
+Also, while the SDK works with `Float` values, most of the time we want to treat these as percentages, and thus should not accept any values outside the `0.0...1.0` range. I've tried to check and clamp these values whenever I could (through unit tests), but I'm guessing there are some parts where a non-clamped value could still get through.
+
 Additionally, the Watcher SDK does very little logging & mostly silently ignores errors. This is not ideal, and in a real world setting would pose real difficulties with debugging. Again though, this was a conscious decision in the interest of time, and would be relatively easy to incorporate (i.e with `OSLog`).
 
 Lastly, there are some bugs which I could not figure out how to fix; namely, while running in the background, the app will sometimes emit `NaN` values which would make their way to the user through notifications, before crashing while attempting to access the CPU load metric. I'm not too sure why that happens, although I'm guessing it has to do with the thread `NSLock`.

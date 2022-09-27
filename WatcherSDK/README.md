@@ -29,6 +29,9 @@ watcher.memoryLoad.publisher.sink { value in
 }
 ```
 
+**Important**
+Make sure the threshold values you use are within the `0.0...1.0` range (the SDK will force a crash if you use invalid values)
+
 ## The slightly longer tutorial
 
 ### Create a local instance
