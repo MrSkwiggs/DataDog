@@ -63,19 +63,23 @@ import Combine
 import Watcher
 
 struct ContentView: View {
-    private let watcher: Watcher
+  let watcher: Watcher
 
-    @State
-    var cpuLoad: Float = 0
+  @State
+  var cpuLoad: Float = 0
 
-    var body: some View {
-      Text("Curent CPU Load: \(cpuLoad * 100, specifier: "%1.2f")%")
-        .onReceive(watcher.cpuLoadManager.percentagePublisher) { value in
-          self.cpuLoad = value
-        }
-    }
+  var body: some View {
+    Text("Curent CPU Load: \(cpuLoad * 100, specifier: "%1.2f")%")
+      .onReceive(watcher.cpuLoadManager.percentagePublisher) { value in
+        self.cpuLoad = value
+      }
+  }
 }
 ```
+
+Which looks like this
+
+![CPULoad Image](Resources/CPULoad.jpeg)
 
 And that's pretty much it. Easy peasy, right?
 
