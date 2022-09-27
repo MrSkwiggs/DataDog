@@ -262,7 +262,7 @@
 		8D82C44528E2DC6C0094AA18 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				8D82C44B28E2F1A00094AA18 /* Events */,
+				8D82C44B28E2F1A00094AA18 /* App Manager */,
 				8D82C44628E2DC770094AA18 /* Notifications */,
 			);
 			path = UseCases;
@@ -277,13 +277,13 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
-		8D82C44B28E2F1A00094AA18 /* Events */ = {
+		8D82C44B28E2F1A00094AA18 /* App Manager */ = {
 			isa = PBXGroup;
 			children = (
 				8D82C44C28E2F1AF0094AA18 /* AppManagerUseCase.swift */,
 				8D82C44E28E2F3E20094AA18 /* AppManager.swift */,
 			);
-			path = Events;
+			path = "App Manager";
 			sourceTree = "<group>";
 		};
 		8DA6ECC628DA39670014C59C /* Metrics */ = {
