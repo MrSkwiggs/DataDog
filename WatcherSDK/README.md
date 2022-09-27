@@ -69,7 +69,7 @@ struct ContentView: View {
   var cpuLoad: Float = 0
 
   var body: some View {
-    Text("Curent CPU Load: \(cpuLoad * 100, specifier: "%1.2f")%")
+    Text("Current CPU Load: \(cpuLoad * 100, specifier: "%1.2f")%")
       .onReceive(watcher.cpuLoadManager.percentagePublisher) { value in
         self.cpuLoad = value
       }
