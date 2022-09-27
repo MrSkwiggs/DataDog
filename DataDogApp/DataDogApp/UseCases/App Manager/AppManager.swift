@@ -39,7 +39,7 @@ class AppManager: AppManagerUseCase {
                 guard let self else { return }
                 self.allEvents.append(event)
                 
-                if self.reportNominalEventsTooSubject.value || event.state.isExceeding {
+                if self.reportNominalEventsTooSubject.value || event.state.isCritical {
                     self.unseenEventsNumberSubject.increment()
                     if self.notificationManager.isNotificationSchedulingAllowed {
                         try? self.notificationManager.sendNotification(for: event)
@@ -55,7 +55,7 @@ class AppManager: AppManagerUseCase {
             .send(
                 allEvents
                     .filter({ event in
-                        reportNominalEventsTooSubject.value ? true : event.state.isExceeding
+                        reportNominalEventsTooSubject.value ? true : event.state.isCritical
                     })
                     .reversed()
             )

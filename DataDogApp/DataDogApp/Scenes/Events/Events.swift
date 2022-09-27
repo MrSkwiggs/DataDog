@@ -56,7 +56,7 @@ struct Events: View {
     private func state(_ state: MetricThresholdState) -> some View {
         Text(state.debugDescription)
             .bold()
-            .foregroundColor(state.isExceeding ? .red : .green)
+            .foregroundColor(state.isCritical ? .red : .green)
     }
 }
 

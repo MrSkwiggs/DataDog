@@ -111,7 +111,7 @@ extension Metrics.ViewModel {
             manager
                 .thresholdStatePublisher
                 .receive(on: DispatchQueue.main)
-                .map(\.isExceeding)
+                .map(\.isCritical)
                 .assign(to: \.metricExceededThreshold, on: self)
                 .store(in: &subscriptions)
         }

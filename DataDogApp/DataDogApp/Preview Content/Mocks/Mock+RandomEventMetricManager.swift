@@ -37,7 +37,7 @@ extension Mock {
             self.refreshFrequency = refreshFrequency
             self.timer = Timer.scheduledTimer(withTimeInterval: refreshFrequency, repeats: true, block: { [weak self] timer in
                 guard let self else { return }
-                self.thresholdStateSubject.send(.random() ? .nominal(value: 0, percentage: 0) : .exceeded(value: 1, percentage: 1))
+                self.thresholdStateSubject.send(.random() ? .nominal(value: 0, percentage: 0) : .critical(value: 1, percentage: 1))
             })
         }
     }

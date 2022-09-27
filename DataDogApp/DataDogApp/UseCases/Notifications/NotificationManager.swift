@@ -35,7 +35,7 @@ class NotificationManager: NotificationManagerUseCase {
     }
     
     private func title(for event: MetricThresholdEvent) -> String {
-        event.state.isExceeding
+        event.state.isCritical
         ? "⚠️ \(event.metricType.description) critical"
         : "✅ \(event.metricType.description) nominal"
     }

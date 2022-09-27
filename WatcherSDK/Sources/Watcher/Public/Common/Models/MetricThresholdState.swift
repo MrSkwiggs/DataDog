@@ -12,19 +12,19 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
     /// The metric has entered the range of allotted values under its threshold
     case nominal(value: Float, percentage: Float)
     /// The metric has reached and exceeded its allotted threshold value range
-    case exceeded(value: Float, percentage: Float)
+    case critical(value: Float, percentage: Float)
     
     // Override the default implementation as we don't care about the actual values for equality checks
     public static func ==(_ lhs: Self, _ rhs: Self) -> Bool {
-        lhs.isExceeding == rhs.isExceeding
+        lhs.isCritical == rhs.isCritical
     }
     
     /// Whether or not this metric has exceeded its threshold
-    public var isExceeding: Bool {
+    public var isCritical: Bool {
         switch self {
         case .nominal:
             return false
-        case .exceeded:
+        case .critical:
             return true
         }
     }
@@ -33,7 +33,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
     public var value: Float {
         switch self {
         case .nominal(let value, _),
-                .exceeded(let value, _):
+                .critical(let value, _):
             return value
         }
     }
@@ -42,7 +42,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
     public var percentage: Float {
         switch self {
         case .nominal(_, let percentage),
-                .exceeded(_, let percentage):
+                .critical(_, let percentage):
             return percentage
         }
     }
@@ -51,7 +51,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
         switch self {
         case .nominal:
             return "The metric has entered the range of allotted values under its threshold"
-        case .exceeded:
+        case .critical:
             return "The metric has reached and exceeded its allotted threshold value range"
         }
     }
@@ -60,7 +60,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
         switch self {
         case .nominal:
             return "Nominal"
-        case .exceeded:
+        case .critical:
             return "Exceeded"
         }
     }

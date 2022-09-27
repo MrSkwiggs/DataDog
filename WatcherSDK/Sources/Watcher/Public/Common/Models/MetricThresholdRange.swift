@@ -32,14 +32,14 @@ public extension MetricThresholdRange {
         switch self {
         case .lower:
             guard Limits.minValue <= metric && metric < threshold * Limits.maxValue else {
-                return .exceeded(value: metric, percentage: percentage)
+                return .critical(value: metric, percentage: percentage)
             }
             
             return .nominal(value: metric, percentage: percentage)
             
         case .upper:
             guard threshold * Limits.maxValue < metric && metric <= Limits.maxValue else {
-                return .exceeded(value: metric, percentage: percentage)
+                return .critical(value: metric, percentage: percentage)
             }
             
             return .nominal(value: metric, percentage: percentage)
