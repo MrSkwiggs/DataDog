@@ -7,20 +7,39 @@
 
 import Foundation
 import Combine
+import UserNotifications
 import Watcher
 
 extension Metrics {
     class ViewModel: ObservableObject {
         
         private var subscriptions: [AnyCancellable] = []
+        private let notificationManager: NotificationManagerUseCase
+        
+        // Convenience local var because getting this status is otherwise async
+        private var notificationAuthorizationStatus: UNAuthorizationStatus = .notDetermined
         
         init(cpuLoadManager: any MetricManagerUseCase,
              memoryLoadManager: any MetricManagerUseCase,
-             batteryLevelManager: any MetricManagerUseCase) {
+             batteryLevelManager: any MetricManagerUseCase,
+             notificationManager: NotificationManagerUseCase) {
             self.cpuLoad = .init(manager: cpuLoadManager)
             self.memoryLoad = .init(manager: memoryLoadManager)
             self.batteryLevel = .init(manager: batteryLevelManager)
+            self.notificationManager = notificationManager
+            
+            setupSubscriptions()
         }
+        
+        private func setupSubscriptions() {
+            notificationManager
+                .isNotificationSchedulingAllowedPublisher
+                .assign(to: \.notificationsEnabled, on: self)
+                .store(in: &subscriptions)
+        }
+        
+        @Published
+        var notificationsEnabled: Bool = false
         
         @Published
         var cpuLoad: MetricWrapper
@@ -31,6 +50,12 @@ extension Metrics {
         
         @Published
         var editorWrapper: EditorWrapper?
+        
+        func userDidSetNotifications(enabled: Bool) {
+            enabled
+                ? notificationManager.enableNotificationScheduling()
+                : notificationManager.disableNotificationScheduling()
+        }
         
         func userDidTapMetric(_ metric: MetricType) {
             let wrapper: MetricWrapper

@@ -38,8 +38,12 @@ class AppManager: AppManagerUseCase {
             .sink { [weak self] event in
                 guard let self else { return }
                 self.allEvents.append(event)
+                
                 if self.reportNominalEventsTooSubject.value || event.state.isExceeding {
                     self.unseenEventsNumberSubject.increment()
+                    if self.notificationManager.isNotificationSchedulingAllowed {
+                        try? self.notificationManager.sendNotification(for: event)
+                    }
                 }
                 self.publishChanges()
             }

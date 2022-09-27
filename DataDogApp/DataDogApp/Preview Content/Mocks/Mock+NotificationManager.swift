@@ -15,18 +15,21 @@ extension Mock {
         
         private let futureAuthorizationStatus: UNAuthorizationStatus
         
+        private let authorizationStatusSubject: CurrentValueSubject<UNAuthorizationStatus, Never> = .init(.notDetermined)
+        private let isNotificationSchedulingAllowedSubject: CurrentValueSubject<Bool, Never> = .init(false)
+        
         init(futureAuthorizationStatus: UNAuthorizationStatus = .authorized) {
             self.futureAuthorizationStatus = futureAuthorizationStatus
         }
         
-        private let authorizationStatusSubject: PassthroughSubject<UNAuthorizationStatus, Never> = .init()
+        var authorizationStatus: UNAuthorizationStatus  { authorizationStatusSubject.value }
         lazy var authorizationStatusPublisher: AnyPublisher<UNAuthorizationStatus, Never> = {
-            authorizationStatusSubject.eraseToAnyPublisher()
+            authorizationStatusPublisher.eraseToAnyPublisher()
         }()
         
-        private let badgeCountSubject: CurrentValueSubject<Int, Never> = .init(0)
-        lazy var badgeCountPublisher: AnyPublisher<Int, Never> = {
-            badgeCountSubject.eraseToAnyPublisher()
+        var isNotificationSchedulingAllowed: Bool { isNotificationSchedulingAllowedSubject.value }
+        lazy var isNotificationSchedulingAllowedPublisher: AnyPublisher<Bool, Never> = {
+            isNotificationSchedulingAllowedSubject.eraseToAnyPublisher()
         }()
         
         func requestPermission(_ handler: @escaping (Bool) -> Void) {
@@ -35,11 +38,28 @@ extension Mock {
         }
         
         func sendNotification(for event: MetricThresholdEvent) throws {
-            badgeCountSubject.send(badgeCountSubject.value + 1)
+            // ignore
         }
         
-        func clearBadgeCount() {
-            badgeCountSubject.send(0)
+        func enableNotificationScheduling() {
+            switch authorizationStatus {
+            case .authorized, .ephemeral, .provisional:
+                isNotificationSchedulingAllowedSubject.send(true)
+            case .denied:
+                isNotificationSchedulingAllowedSubject.send(false)
+            case .notDetermined:
+                requestPermission { [weak self] isAllowed in
+                    guard let self else { return }
+                    self.isNotificationSchedulingAllowedSubject.send(isAllowed)
+                }
+                
+            @unknown default:
+                break
+            }
+        }
+        
+        func disableNotificationScheduling() {
+            isNotificationSchedulingAllowedSubject.send(false)
         }
     }
 }

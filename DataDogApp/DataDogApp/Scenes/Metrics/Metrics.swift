@@ -31,23 +31,38 @@ struct Metrics: View {
     
     var body: some View {
         
-        LazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.fixed(200))]) {
+        VStack {
+            Toggle(isOn: .init(get: {
+                viewModel.notificationsEnabled
+            },
+                               set: { newValue in
+                viewModel.userDidSetNotifications(enabled: newValue)
+            })) {
+                Text("Enable notifications")
+            }
             
-            cpuMetric
-                .onTapGesture {
-                    viewModel.userDidTapMetric(.cpu)
-                }
+            Spacer()
             
-            memoryMetric
-                .onTapGesture {
-                    viewModel.userDidTapMetric(.memory)
-                }
-            
-            batteryMetric
-                .onTapGesture {
-                    viewModel.userDidTapMetric(.battery)
-                }
+            LazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.fixed(200))]) {
+                
+                cpuMetric
+                    .onTapGesture {
+                        viewModel.userDidTapMetric(.cpu)
+                    }
+                
+                memoryMetric
+                    .onTapGesture {
+                        viewModel.userDidTapMetric(.memory)
+                    }
+                
+                batteryMetric
+                    .onTapGesture {
+                        viewModel.userDidTapMetric(.battery)
+                    }
+            }
+            Spacer()
         }
+        .padding()
         .sheet(item: $viewModel.editorWrapper, content: { editor in
             ThresholdEditor(threshold: .init(get: editor.get, set: editor.set),
                             metricType: editor.metricType) {
@@ -96,7 +111,8 @@ struct Metrics_Previews: PreviewProvider {
     static let metricsViewModel: Metrics.ViewModel =
         .init(cpuLoadManager: cpuLoadManager,
               memoryLoadManager: memoryLoadManager,
-              batteryLevelManager: batteryLevelManager)
+              batteryLevelManager: batteryLevelManager,
+              notificationManager: Mock.NotificationManager())
     static var previews: some View {
         Metrics(viewModel: metricsViewModel)
     }
