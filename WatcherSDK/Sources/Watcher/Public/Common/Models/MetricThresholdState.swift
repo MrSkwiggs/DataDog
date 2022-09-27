@@ -61,7 +61,7 @@ public enum MetricThresholdState: Codable, Equatable, CustomStringConvertible, C
         case .nominal:
             return "Nominal"
         case .critical:
-            return "Exceeded"
+            return "Critical"
         }
     }
 }
