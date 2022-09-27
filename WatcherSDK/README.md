@@ -20,6 +20,10 @@ Because ain't nobody got time to manipulate raw pointers & memory to gather such
 Import the package as a dependency, create an instance of `Watcher` on App launch (**important**), then subscribe to the metric manager of your choice through Combine:
 
 ```swift
+let watcher = Watcher.configure(cpuThreshold: 0.5,
+                                memoryLoadThreshold: 0.5,
+                                batteryLevelThreshold: 0.2,
+                                refreshFrequency: 0.3)
 watcher.memoryLoad.publisher.sink { value in
   print("Memory in use: \(value) Mb") // prints "Memory in use: 17.3 Mb" for example
 }
