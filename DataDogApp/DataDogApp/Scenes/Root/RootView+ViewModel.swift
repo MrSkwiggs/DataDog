@@ -28,6 +28,7 @@ extension RootView {
                     guard let self else { return }
                     guard self.selectedTab != .events else {
                         self.appManager.markAllEventsAsSeen()
+                        self.newEventsCount = 0
                         return
                     }
                     self.newEventsCount = count
