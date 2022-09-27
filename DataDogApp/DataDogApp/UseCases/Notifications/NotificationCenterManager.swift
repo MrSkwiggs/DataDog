@@ -28,6 +28,9 @@ class NotificationManager: NotificationManagerUseCase {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
             guard let self else { return }
             self.authorizationStatusSubject.send(settings.authorizationStatus)
+            if settings.authorizationStatus == .authorized {
+                self.enableNotificationScheduling()
+            }
         }
     }
     

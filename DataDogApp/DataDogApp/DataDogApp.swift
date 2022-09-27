@@ -28,6 +28,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                                   appManager: AppManager(eventProvider: watcher.eventProvider,
                                                          notificationManager: notificationManager))
         
+        viewModelProvider
+            .appManager
+            .unseenEventsNumberPublisher
+            .sink { value in
+                UIApplication.shared.applicationIconBadgeNumber = value
+            }
+            .store(in: &subscriptions)
+        
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        
         return true
     }
 }
