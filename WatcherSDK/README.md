@@ -216,6 +216,6 @@ Each Manager holds a few variables;
 
 ## Installation
 
-This package is available through as a Swift Package
+This package is available as a Swift Package
 
 To install it, simply drag & drop it into your project
