@@ -10,9 +10,11 @@ import Watcher
 
 class ViewModelProvider: ObservableObject {
     let watcher: Watcher
+    let notificationManager: NotificationManagerUseCase
     
-    init(watcher: Watcher) {
+    init(watcher: Watcher, notificationManager: NotificationManagerUseCase) {
         self.watcher = watcher
+        self.notificationManager = notificationManager
     }
     
     var rootViewModel: RootView.ViewModel {

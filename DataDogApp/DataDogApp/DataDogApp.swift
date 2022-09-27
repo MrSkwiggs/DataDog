@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import Watcher
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -17,9 +18,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     var viewModelProvider: ViewModelProvider!
     
+    private var subscriptions: [AnyCancellable] = []
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        viewModelProvider = .init(watcher: watcher)
+        viewModelProvider = .init(watcher: watcher, notificationManager: NotificationManager())
+        
+        viewModelProvider
+            .notificationManager
+            .badgeCountPublisher
+            .sink { count in
+                UIApplication.shared.applicationIconBadgeNumber = count
+            }
+            .store(in: &subscriptions)
+        
         return true
     }
 }

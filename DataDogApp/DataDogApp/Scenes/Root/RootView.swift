@@ -41,7 +41,8 @@ struct RootView: View {
 
 struct ContentView_Previews: PreviewProvider {
     
-    static let viewModelProvider: ViewModelProvider = .init(watcher: .configure())
+    static let viewModelProvider: ViewModelProvider = .init(watcher: .configure(),
+                                                            notificationManager: Mock.NotificationManager())
     
     static var previews: some View {
         RootView(viewModel: viewModelProvider.rootViewModel)

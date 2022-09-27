@@ -12,10 +12,12 @@ import Watcher
 extension RootView {
     class ViewModel: ObservableObject {
         private var subscriptions: [AnyCancellable] = []
-        private unowned var eventProvider: EventProvider
+        private var eventProvider: EventProvider
+        private var notificationManager: NotificationManagerUseCase
         
-        init(eventProvider: EventProvider) {
+        init(eventProvider: EventProvider, notificationManager: NotificationManagerUseCase) {
             self.eventProvider = eventProvider
+            self.notificationManager = notificationManager
             
             setupSubscriptions()
         }
@@ -31,13 +33,16 @@ extension RootView {
                 }
                 .store(in: &subscriptions)
             
+            notificationManager
+                .
+            
             $selectedTab
                 .removeDuplicates()
                 .sink { [self] tab in
                     switch tab {
                     case .metrics: break
                     case .events:
-                        newEventsCount = 0
+                        notificationManager.clearBadgeCount()
                     }
                 }
                 .store(in: &subscriptions)

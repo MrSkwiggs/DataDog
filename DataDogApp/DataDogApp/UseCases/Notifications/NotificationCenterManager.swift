@@ -12,6 +12,8 @@ import Watcher
 
 class NotificationManager: NotificationManagerUseCase {
     
+    // MARK: - Private
+    
     private let center: UNUserNotificationCenter = .current()
     private let percentageNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -20,10 +22,7 @@ class NotificationManager: NotificationManagerUseCase {
     }()
     
     private let authorizationStatusSubject: CurrentValueSubject<UNAuthorizationStatus, Never> = .init(.notDetermined)
-    
-    lazy var authorizationStatusPublisher: AnyPublisher<UNAuthorizationStatus, Never> = {
-        authorizationStatusPublisher.eraseToAnyPublisher()
-    }()
+    private let badgeCountSubject: CurrentValueSubject<Int, Never> = .init(0)
     
     private func fetchAuthorizationStatus() {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
@@ -32,9 +31,31 @@ class NotificationManager: NotificationManagerUseCase {
         }
     }
     
+    private func title(for event: MetricThresholdEvent) -> String {
+        event.state.isExceeding
+        ? "⚠️ \(event.metricType.description) exceeded"
+        : "✅ \(event.metricType.description) nominal"
+    }
+    
+    private func subtitle(for event: MetricThresholdEvent) -> String {
+        let metric = event.metricType.rawValue
+        let percentage = String(format: "%1.0f", event.state.percentage)
+        return "\(metric) crossed the \(percentage)% threshold"
+    }
+    
     init() {
         fetchAuthorizationStatus()
     }
+    
+    // MARK: - Protocol Conformance
+    
+    lazy var authorizationStatusPublisher: AnyPublisher<UNAuthorizationStatus, Never> = {
+        authorizationStatusPublisher.eraseToAnyPublisher()
+    }()
+    
+    lazy var badgeCountPublisher: AnyPublisher<Int, Never> = {
+        badgeCountSubject.eraseToAnyPublisher()
+    }()
     
     func requestPermission(_ handler: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization { granted, error in
@@ -57,17 +78,10 @@ class NotificationManager: NotificationManagerUseCase {
         
         // add our notification request
         center.add(request)
+        badgeCountSubject.send(badgeCountSubject.value + 1)
     }
     
-    private func title(for event: MetricThresholdEvent) -> String {
-        event.state.isExceeding
-            ? "⚠️ \(event.metricType.description) exceeded"
-            : "✅ \(event.metricType.description) nominal"
-    }
-    
-    private func subtitle(for event: MetricThresholdEvent) -> String {
-        let metric = event.metricType.rawValue
-        let percentage = String(format: "%1.0f", event.state.percentage)
-        return "\(metric) crossed the \(percentage)% threshold"
+    func clearBadgeCount() {
+        badgeCountSubject.send(0)
     }
 }
