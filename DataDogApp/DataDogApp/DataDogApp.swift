@@ -16,18 +16,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                                                    batteryLevelThreshold: 0.9999,
                                                    refreshFrequency: 0.3)
     
-    var viewModelProvider: ViewModelProvider!
+    lazy var viewModelProvider: ViewModelProvider = {
+        let notificationManager = NotificationManager()
+        return .init(watcher: watcher,
+                     notificationManager: notificationManager,
+                     appManager: AppManager(eventProvider: watcher.eventProvider,
+                                            notificationManager: notificationManager))
+    }()
     
     private var subscriptions: [AnyCancellable] = []
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        let notificationManager = NotificationManager()
-        viewModelProvider = .init(watcher: watcher,
-                                  notificationManager: notificationManager,
-                                  appManager: AppManager(eventProvider: watcher.eventProvider,
-                                                         notificationManager: notificationManager))
-        
         viewModelProvider
             .appManager
             .unseenEventsNumberPublisher
@@ -36,14 +36,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
             .store(in: &subscriptions)
         
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        
         return true
+    }
+    
+    func sceneEnteredBackground() {
+        viewModelProvider.watcher.enableBackgroundFetching()
     }
 }
 
 @main
 struct DataDogApp: App {
+    
+    @Environment(\.scenePhase) var scenePhase
     
     @UIApplicationDelegateAdaptor
     var delegate: AppDelegate
@@ -52,6 +56,20 @@ struct DataDogApp: App {
         WindowGroup {
             RootView(viewModel: delegate.viewModelProvider.rootViewModel)
                 .environmentObject(delegate.viewModelProvider)
+        }
+        .onChange(of: scenePhase) { scenePhase in
+            switch scenePhase {
+            case .active:
+                break
+            case .background:
+                delegate.sceneEnteredBackground()
+
+            case .inactive:
+                break
+
+            @unknown default:
+                break
+            }
         }
     }
 }

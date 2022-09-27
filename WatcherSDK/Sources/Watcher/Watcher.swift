@@ -1,4 +1,6 @@
 import Foundation
+import BackgroundTasks
+import OSLog
 
 public class Watcher {
     
@@ -18,6 +20,8 @@ public class Watcher {
         self.memoryLoadManager = memoryLoadManager
         self.batteryLevelManager = batteryLevelManager
         self.eventProvider = eventProvider
+        
+        registerBackgroundTasks()
     }
     
     public static func configure(cpuThreshold: Float = 0.25,
@@ -34,9 +38,42 @@ public class Watcher {
                         batteryLevelThreshold: batteryLevelThreshold,
                         refreshFrequency: refreshFrequency)
     }
+    
+    private func registerBackgroundTasks() {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.backgroundProcessIdentifier, using: nil) { task in
+            print("Background Task Running")
+            try? self.cpuLoadManager.fetchOnce()
+            try? self.memoryLoadManager.fetchOnce()
+            try? self.batteryLevelManager.fetchOnce()
+            
+            task.setTaskCompleted(success: true)
+            self.scheduleBackgroundTask()
+        }
+    }
+    
+    public func enableBackgroundFetching() {
+        scheduleBackgroundTask()
+    }
+    
+    private func scheduleBackgroundTask() {
+        let request = BGAppRefreshTaskRequest(identifier: Self.backgroundProcessIdentifier)
+        
+        print("Background Task Scheduled")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 10 * 60) // Refresh after 10 minutes.
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("scheduled")
+        } catch {
+            print("Could not schedule background task \(error.localizedDescription)")
+        }
+    }
 }
 
 private extension Watcher {
+    
+    static let backgroundProcessIdentifier: String = "com.datadog.watcher.background-process"
+    
     static func `default`(cpuThreshold: Float,
                           memoryLoadThreshold: Float,
                           batteryLevelThreshold: Float,

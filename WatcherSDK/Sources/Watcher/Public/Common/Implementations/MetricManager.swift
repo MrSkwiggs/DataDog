@@ -56,9 +56,7 @@ open class MetricManager: MetricManagerUseCase {
         let timer = BackgroundTimer(timeInterval: Double(refreshFrequency), queue: queue) { [weak self] in
             guard let self else { return }
             do {
-                let newValue = try self.metricProvider.fetchMetric()
-                self.metricSubject.send(newValue)
-                self.computeThresholdState(for: newValue)
+                try self.fetchOnce()
             } catch {
                 // TODO: needs more thorough error handling, but eventually if this fails it's not worth crashing
                 // just handle silently (don't emit, but log) for now
@@ -69,6 +67,16 @@ open class MetricManager: MetricManagerUseCase {
         timer.resume()
         return timer
     }
+    
+    // MARK: - Internal
+    
+    func fetchOnce() throws {
+        let newValue = try self.metricProvider.fetchMetric()
+        self.metricSubject.send(newValue)
+        self.computeThresholdState(for: newValue)
+    }
+    
+    // MARK: - Public
     
     public init(metricProvider: any MetricProviderUseCase,
                        threshold: Float = 0.5,
