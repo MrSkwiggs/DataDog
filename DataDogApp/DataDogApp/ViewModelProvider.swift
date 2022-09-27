@@ -11,14 +11,18 @@ import Watcher
 class ViewModelProvider: ObservableObject {
     let watcher: Watcher
     let notificationManager: NotificationManagerUseCase
+    let appManager: AppManagerUseCase
     
-    init(watcher: Watcher, notificationManager: NotificationManagerUseCase) {
+    init(watcher: Watcher,
+         notificationManager: NotificationManagerUseCase,
+         appManager: AppManagerUseCase) {
         self.watcher = watcher
         self.notificationManager = notificationManager
+        self.appManager = appManager
     }
     
     var rootViewModel: RootView.ViewModel {
-        .init(eventProvider: watcher.eventProvider)
+        .init(appManager: appManager)
     }
     
     var metricsViewModel: Metrics.ViewModel {
@@ -33,6 +37,6 @@ class ViewModelProvider: ObservableObject {
     }
     
     var eventsViewModel: Events.ViewModel {
-        .init(eventProvider: watcher.eventProvider)
+        .init(appManager: appManager)
     }
 }

@@ -11,7 +11,7 @@ import Watcher
 
 extension Events {
     class ViewModel: ObservableObject {
-        private let eventProvider: EventProvider
+        private let appManager: AppManagerUseCase
         private var subscriptions: [AnyCancellable] = []
         
         @Published
@@ -20,37 +20,27 @@ extension Events {
         @Published
         var showsNominalEvents: Bool = false
         
-        init(eventProvider: EventProvider) {
-            self.eventProvider = eventProvider
-            self.events = filteredEvents(showNominalEvents: showsNominalEvents)
+        init(appManager: AppManagerUseCase) {
+            self.appManager = appManager
             
             setupSubscriptions()
         }
         
         private func setupSubscriptions() {
-            eventProvider
-                .publisher
+            appManager
+                .eventsPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
+                .sink { [weak self] events in
                     guard let self else { return }
-                    self.events = self.filteredEvents(showNominalEvents: self.showsNominalEvents)
+                    self.events = events
                 }
                 .store(in: &subscriptions)
             
             $showsNominalEvents
                 .sink { newValue in
-                    self.events = self.filteredEvents(showNominalEvents: newValue)
+                    self.appManager.setShouldReportNominalEventsToo(newValue)
                 }
                 .store(in: &subscriptions)
-        }
-        
-        private func filteredEvents(showNominalEvents: Bool) -> [MetricThresholdEvent] {
-            eventProvider
-                .events
-                .filter { event in
-                    showNominalEvents ? true : event.state.isExceeding
-                }
-                .reversed()
         }
     }
 }

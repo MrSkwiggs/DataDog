@@ -22,15 +22,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        viewModelProvider = .init(watcher: watcher, notificationManager: NotificationManager())
-        
-        viewModelProvider
-            .notificationManager
-            .badgeCountPublisher
-            .sink { count in
-                UIApplication.shared.applicationIconBadgeNumber = count
-            }
-            .store(in: &subscriptions)
+        let notificationManager = NotificationManager()
+        viewModelProvider = .init(watcher: watcher,
+                                  notificationManager: notificationManager,
+                                  appManager: AppManager(eventProvider: watcher.eventProvider,
+                                                         notificationManager: notificationManager))
         
         return true
     }

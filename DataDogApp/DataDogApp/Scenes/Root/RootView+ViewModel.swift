@@ -12,37 +12,35 @@ import Watcher
 extension RootView {
     class ViewModel: ObservableObject {
         private var subscriptions: [AnyCancellable] = []
-        private var eventProvider: EventProvider
-        private var notificationManager: NotificationManagerUseCase
+        private var appManager: AppManagerUseCase
         
-        init(eventProvider: EventProvider, notificationManager: NotificationManagerUseCase) {
-            self.eventProvider = eventProvider
-            self.notificationManager = notificationManager
+        init(appManager: AppManagerUseCase) {
+            self.appManager = appManager
             
             setupSubscriptions()
         }
         
         private func setupSubscriptions() {
-            eventProvider
-                .publisher
+            appManager
+                .unseenEventsNumberPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
+                .sink { [weak self] count in
                     guard let self else { return }
-                    guard self.selectedTab != .events else { return }
-                    self.newEventsCount += 1
+                    guard self.selectedTab != .events else {
+                        self.appManager.markAllEventsAsSeen()
+                        return
+                    }
+                    self.newEventsCount = count
                 }
                 .store(in: &subscriptions)
             
-            notificationManager
-                .
-            
             $selectedTab
                 .removeDuplicates()
-                .sink { [self] tab in
+                .sink { tab in
                     switch tab {
                     case .metrics: break
                     case .events:
-                        notificationManager.clearBadgeCount()
+                        self.appManager.markAllEventsAsSeen()
                     }
                 }
                 .store(in: &subscriptions)

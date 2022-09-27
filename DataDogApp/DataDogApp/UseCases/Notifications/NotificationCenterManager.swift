@@ -22,7 +22,6 @@ class NotificationManager: NotificationManagerUseCase {
     }()
     
     private let authorizationStatusSubject: CurrentValueSubject<UNAuthorizationStatus, Never> = .init(.notDetermined)
-    private let badgeCountSubject: CurrentValueSubject<Int, Never> = .init(0)
     
     private func fetchAuthorizationStatus() {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
@@ -53,10 +52,6 @@ class NotificationManager: NotificationManagerUseCase {
         authorizationStatusPublisher.eraseToAnyPublisher()
     }()
     
-    lazy var badgeCountPublisher: AnyPublisher<Int, Never> = {
-        badgeCountSubject.eraseToAnyPublisher()
-    }()
-    
     func requestPermission(_ handler: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization { granted, error in
             guard error == nil else { return }
@@ -78,10 +73,5 @@ class NotificationManager: NotificationManagerUseCase {
         
         // add our notification request
         center.add(request)
-        badgeCountSubject.send(badgeCountSubject.value + 1)
-    }
-    
-    func clearBadgeCount() {
-        badgeCountSubject.send(0)
     }
 }

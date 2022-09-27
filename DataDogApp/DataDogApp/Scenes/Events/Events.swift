@@ -69,6 +69,6 @@ struct Events_Previews: PreviewProvider {
     }()
     
     static var previews: some View {
-        Events(viewModel: .init(eventProvider: eventProvider))
+        Events(viewModel: .init(appManager: Mock.AppManager()))
     }
 }

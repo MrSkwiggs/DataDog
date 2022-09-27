@@ -15,9 +15,6 @@ public protocol NotificationManagerUseCase: AnyObject {
     /// Publishes authorization status whenever it changes
     var authorizationStatusPublisher: AnyPublisher<UNAuthorizationStatus, Never> { get }
     
-    /// Publishes the number of "unseen" notifications
-    var badgeCountPublisher: AnyPublisher<Int, Never> { get }
-    
     /// Asks the user for permission to schedule & send notifications
     ///
     /// - parameter handler: This block is called whenever the user responds to the request, with a flag that indicates whether or not the user gave their permission.
@@ -25,7 +22,4 @@ public protocol NotificationManagerUseCase: AnyObject {
     
     /// Schedules & sends a notifications for the given event
     func sendNotification(for event: MetricThresholdEvent) throws
-    
-    /// Resets the badge count to 0
-    func clearBadgeCount()
 }
