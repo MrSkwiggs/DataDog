@@ -71,6 +71,14 @@ struct Metrics: View {
                                   .presentationDetents([.medium])
         })
         .navigationTitle("Metrics")
+        .onReceive(viewModel.openSystemSettings) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {
+                UIApplication.shared.open(appSettings)
+            }
+        }
+        .onAppear {
+            viewModel.viewDidAppear()
+        }
     }
     
     private var cpuMetric: some View {

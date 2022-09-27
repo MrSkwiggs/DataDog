@@ -32,6 +32,10 @@ extension Mock {
             isNotificationSchedulingAllowedSubject.eraseToAnyPublisher()
         }()
         
+        func fetchAuthorizationStatus() {
+            // do nothing
+        }
+        
         func requestPermission(_ handler: @escaping (Bool) -> Void) {
             handler(futureAuthorizationStatus == .authorized)
             authorizationStatusSubject.send(futureAuthorizationStatus)

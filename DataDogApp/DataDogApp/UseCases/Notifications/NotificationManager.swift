@@ -24,16 +24,6 @@ class NotificationManager: NotificationManagerUseCase {
     private let authorizationStatusSubject: CurrentValueSubject<UNAuthorizationStatus, Never> = .init(.notDetermined)
     private let isNotificationSchedulingAllowedSubject: CurrentValueSubject<Bool, Never> = .init(false)
     
-    private func fetchAuthorizationStatus() {
-        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
-            guard let self else { return }
-            self.authorizationStatusSubject.send(settings.authorizationStatus)
-            if settings.authorizationStatus == .authorized {
-                self.enableNotificationScheduling()
-            }
-        }
-    }
-    
     private func title(for event: MetricThresholdEvent) -> String {
         event.state.isCritical
         ? "⚠️ \(event.metricType.description) critical"
@@ -61,6 +51,16 @@ class NotificationManager: NotificationManagerUseCase {
     lazy var isNotificationSchedulingAllowedPublisher: AnyPublisher<Bool, Never> = {
         isNotificationSchedulingAllowedSubject.receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }()
+    
+    func fetchAuthorizationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            guard let self else { return }
+            self.authorizationStatusSubject.send(settings.authorizationStatus)
+            if settings.authorizationStatus == .authorized {
+                self.enableNotificationScheduling()
+            }
+        }
+    }
     
     func requestPermission(_ handler: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .criticalAlert]) { granted, error in

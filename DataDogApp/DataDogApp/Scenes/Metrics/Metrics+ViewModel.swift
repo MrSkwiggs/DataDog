@@ -51,7 +51,13 @@ extension Metrics {
         @Published
         var editorWrapper: EditorWrapper?
         
+        var openSystemSettings: PassthroughSubject<Void, Never> = .init()
+        
         func userDidSetNotifications(enabled: Bool) {
+            if enabled && notificationManager.authorizationStatus == .denied {
+                openSystemSettings.send()
+                return
+            }
             enabled
                 ? notificationManager.enableNotificationScheduling()
                 : notificationManager.disableNotificationScheduling()
@@ -76,6 +82,10 @@ extension Metrics {
         
         func userDidFinishEditingThreshold() {
             self.editorWrapper = nil
+        }
+        
+        func viewDidAppear() {
+            notificationManager.fetchAuthorizationStatus()
         }
     }
 }

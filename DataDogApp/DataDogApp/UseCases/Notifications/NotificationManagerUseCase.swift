@@ -23,6 +23,9 @@ public protocol NotificationManagerUseCase: AnyObject {
     /// Publishes whether or not notification scheduling is allowed whenever it changes.
     var isNotificationSchedulingAllowedPublisher: AnyPublisher<Bool, Never> { get }
     
+    /// Instructs the manager to refresh its authorization status
+    func fetchAuthorizationStatus()
+    
     /// Asks the user for permission to schedule & send notifications
     ///
     /// - parameter handler: This block is called whenever the user responds to the request, with a flag that indicates whether or not the user gave their permission.
