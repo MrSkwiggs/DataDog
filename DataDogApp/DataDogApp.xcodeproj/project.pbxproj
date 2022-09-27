@@ -32,8 +32,8 @@
 		8D4F136228E0AC5A00C948A9 /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136128E0AC5A00C948A9 /* Color+Brand.swift */; };
 		8D4F136428E0AF4D00C948A9 /* ThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136328E0AF4D00C948A9 /* ThresholdEditor.swift */; };
 		8D4F136828E0B01800C948A9 /* BrandedButtonStyle .swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4F136728E0B01800C948A9 /* BrandedButtonStyle .swift */; };
-		8D82C44428E2DB970094AA18 /* NotificationCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44328E2DB970094AA18 /* NotificationCenterManager.swift */; };
-		8D82C44828E2DC830094AA18 /* NotificationsPermissionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44728E2DC830094AA18 /* NotificationsPermissionUseCase.swift */; };
+		8D82C44428E2DB970094AA18 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44328E2DB970094AA18 /* NotificationManager.swift */; };
+		8D82C44828E2DC830094AA18 /* NotificationManagerUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44728E2DC830094AA18 /* NotificationManagerUseCase.swift */; };
 		8D82C44A28E2EAB70094AA18 /* Mock+NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44928E2EAB70094AA18 /* Mock+NotificationManager.swift */; };
 		8D82C44D28E2F1AF0094AA18 /* AppManagerUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44C28E2F1AF0094AA18 /* AppManagerUseCase.swift */; };
 		8D82C44F28E2F3E20094AA18 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82C44E28E2F3E20094AA18 /* AppManager.swift */; };
@@ -88,8 +88,8 @@
 		8D4F136128E0AC5A00C948A9 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
 		8D4F136328E0AF4D00C948A9 /* ThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThresholdEditor.swift; sourceTree = "<group>"; };
 		8D4F136728E0B01800C948A9 /* BrandedButtonStyle .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrandedButtonStyle .swift"; sourceTree = "<group>"; };
-		8D82C44328E2DB970094AA18 /* NotificationCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManager.swift; sourceTree = "<group>"; };
-		8D82C44728E2DC830094AA18 /* NotificationsPermissionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPermissionUseCase.swift; sourceTree = "<group>"; };
+		8D82C44328E2DB970094AA18 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		8D82C44728E2DC830094AA18 /* NotificationManagerUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerUseCase.swift; sourceTree = "<group>"; };
 		8D82C44928E2EAB70094AA18 /* Mock+NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+NotificationManager.swift"; sourceTree = "<group>"; };
 		8D82C44C28E2F1AF0094AA18 /* AppManagerUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManagerUseCase.swift; sourceTree = "<group>"; };
 		8D82C44E28E2F3E20094AA18 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
@@ -275,8 +275,8 @@
 		8D82C44628E2DC770094AA18 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				8D82C44728E2DC830094AA18 /* NotificationsPermissionUseCase.swift */,
-				8D82C44328E2DB970094AA18 /* NotificationCenterManager.swift */,
+				8D82C44728E2DC830094AA18 /* NotificationManagerUseCase.swift */,
+				8D82C44328E2DB970094AA18 /* NotificationManager.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -468,8 +468,8 @@
 				8D82C45328E2FB060094AA18 /* Combine+Convenience.swift in Sources */,
 				8D82C44A28E2EAB70094AA18 /* Mock+NotificationManager.swift in Sources */,
 				8D82C45128E2F9260094AA18 /* Mock+AppManager.swift in Sources */,
-				8D82C44828E2DC830094AA18 /* NotificationsPermissionUseCase.swift in Sources */,
-				8D82C44428E2DB970094AA18 /* NotificationCenterManager.swift in Sources */,
+				8D82C44828E2DC830094AA18 /* NotificationManagerUseCase.swift in Sources */,
+				8D82C44428E2DB970094AA18 /* NotificationManager.swift in Sources */,
 				8D4F136028E0A07400C948A9 /* Metrics+Chart.swift in Sources */,
 				8D82C44D28E2F1AF0094AA18 /* AppManagerUseCase.swift in Sources */,
 				8D07720B28DA356B0022433F /* Metrics.swift in Sources */,

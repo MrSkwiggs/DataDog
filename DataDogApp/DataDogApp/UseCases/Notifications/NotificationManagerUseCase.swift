@@ -1,5 +1,5 @@
 //
-//  NotificationsPermissionUseCase.swift
+//  NotificationManagerUseCase.swift
 //  
 //
 //  Created by Dorian Grolaux on 26/09/2022.

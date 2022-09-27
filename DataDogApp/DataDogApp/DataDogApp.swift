@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import Watcher
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     private lazy var watcher: Watcher = .configure(cpuThreshold: 0.25,
                                                    memoryLoadThreshold: 0.01,
@@ -36,11 +36,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
             .store(in: &subscriptions)
         
+        UNUserNotificationCenter.current().delegate = self
+        
         return true
     }
     
     func sceneEnteredBackground() {
         viewModelProvider.watcher.enableBackgroundFetching()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .badge, .sound])
     }
 }
 

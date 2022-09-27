@@ -40,8 +40,11 @@ public class Watcher {
     }
     
     private func registerBackgroundTasks() {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.backgroundProcessIdentifier, using: nil) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.backgroundProcessIdentifier, using: nil) { [weak self] task in
+            guard let self else { return }
+            
             print("Background Task Running")
+            
             try? self.cpuLoadManager.fetchOnce()
             try? self.memoryLoadManager.fetchOnce()
             try? self.batteryLevelManager.fetchOnce()

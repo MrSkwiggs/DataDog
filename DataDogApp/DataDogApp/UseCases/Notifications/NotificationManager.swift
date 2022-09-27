@@ -1,5 +1,5 @@
 //
-//  NotificationCenterManager.swift
+//  NotificationManager.swift
 //  DataDogApp
 //
 //  Created by Dorian Grolaux on 27/09/2022.
@@ -36,14 +36,14 @@ class NotificationManager: NotificationManagerUseCase {
     
     private func title(for event: MetricThresholdEvent) -> String {
         event.state.isExceeding
-        ? "⚠️ \(event.metricType.description) exceeded"
+        ? "⚠️ \(event.metricType.description) critical"
         : "✅ \(event.metricType.description) nominal"
     }
     
     private func subtitle(for event: MetricThresholdEvent) -> String {
         let metric = event.metricType.rawValue
         let percentage = String(format: "%1.0f", event.state.percentage * 100)
-        return "\(metric) crossed the \(percentage)% threshold"
+        return "\(metric) at \(percentage)%"
     }
     
     init() {
