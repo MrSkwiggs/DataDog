@@ -30,6 +30,8 @@ public class EventProvider {
             .mapToEvent(for: metricType)
             .sink { [weak self] event in
                 guard let self else { return }
+                /// update the events array before emitting 
+                self.events.append(event)
                 self.subject.send(event)
             }
             .store(in: &subscriptions)
@@ -37,6 +39,7 @@ public class EventProvider {
     
     /// This provider's event publisher
     public lazy var publisher: AnyPublisher<MetricThresholdEvent, Never> = { subject.eraseToAnyPublisher() }()
+    public var events: [MetricThresholdEvent] = []
 }
 
 public extension AnyPublisher where Output == MetricThresholdState {

@@ -17,12 +17,6 @@ struct ThresholdEditor: View {
     
     let metricType: MetricType
     
-    private let formatter: Formatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .percent
-        return formatter
-    }()
-    
     let completion: () -> Void
     
     init(threshold: Binding<Float>,
