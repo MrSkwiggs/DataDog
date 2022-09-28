@@ -20,6 +20,7 @@ class NotificationManager: NotificationManagerUseCase {
         formatter.numberStyle = .percent
         return formatter
     }()
+    private var userNotificationPreference: Bool = false
     
     private let authorizationStatusSubject: CurrentValueSubject<UNAuthorizationStatus, Never> = .init(.notDetermined)
     private let isNotificationSchedulingAllowedSubject: CurrentValueSubject<Bool, Never> = .init(false)
@@ -56,7 +57,7 @@ class NotificationManager: NotificationManagerUseCase {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
             guard let self else { return }
             self.authorizationStatusSubject.send(settings.authorizationStatus)
-            if settings.authorizationStatus == .authorized {
+            if settings.authorizationStatus == .authorized && self.userNotificationPreference {
                 self.enableNotificationScheduling()
             }
         }
@@ -66,6 +67,7 @@ class NotificationManager: NotificationManagerUseCase {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .criticalAlert]) { granted, error in
             guard error == nil else { return }
             handler(granted)
+            self.userNotificationPreference = true
             self.fetchAuthorizationStatus()
         }
     }
@@ -107,6 +109,7 @@ class NotificationManager: NotificationManagerUseCase {
     }
     
     func disableNotificationScheduling() {
+        userNotificationPreference = false
         isNotificationSchedulingAllowedSubject.send(false)
     }
 }
