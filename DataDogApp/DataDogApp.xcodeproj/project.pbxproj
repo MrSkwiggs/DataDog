@@ -73,9 +73,9 @@
 		8D0771F728DA32210022433F /* DataDogWatchAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDogWatchAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8D07720A28DA356B0022433F /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		8D07720C28DA35710022433F /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
-		8D0D144728DA517A0075E192 /* WatcherSDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WatcherSDK; path = ../WatcherSDK; sourceTree = "<group>"; };
 		8D0D145128DF21420075E192 /* Mock+RandomMetricProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomMetricProvider.swift"; sourceTree = "<group>"; };
 		8D0D145328DF22970075E192 /* Mock+MetricConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+MetricConfigurator.swift"; sourceTree = "<group>"; };
+		8D282DC128E4D3C400FF2F9E /* WatcherSDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WatcherSDK; path = ../WatcherSDK; sourceTree = "<group>"; };
 		8D4F134828DF7CF400C948A9 /* Events+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Events+ViewModel.swift"; sourceTree = "<group>"; };
 		8D4F134C28E0578700C948A9 /* Mock+RandomEventMetricManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+RandomEventMetricManager.swift"; sourceTree = "<group>"; };
 		8D4F134F28E0681400C948A9 /* RootView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView+ViewModel.swift"; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 		8D0D143D28DA50A40075E192 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				8D0D144728DA517A0075E192 /* WatcherSDK */,
+				8D282DC128E4D3C400FF2F9E /* WatcherSDK */,
 			);
 			name = Packages;
 			sourceTree = "<group>";

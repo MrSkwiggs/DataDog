@@ -28,9 +28,7 @@ public enum MetricThresholdRange: Codable {
 public extension MetricThresholdRange {
     /// Computes the threshold state from the given metric & threshold values.
     func mapToState(_ metric: Float, on Limits: MetricProviderUseCase.Type, threshold: Float) -> MetricThresholdState {
-        let range = Limits.maxValue - Limits.minValue
-        let correctedStartValue = metric - Limits.minValue
-        let percentage = correctedStartValue / range
+        let percentage = metric.expressedAsPercentage(ofMinValue: Limits.minValue, maxValue: Limits.maxValue)
         
         switch self {
         case .lower:

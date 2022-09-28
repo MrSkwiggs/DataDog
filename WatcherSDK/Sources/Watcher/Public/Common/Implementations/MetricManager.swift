@@ -102,7 +102,7 @@ open class MetricManager: MetricManagerUseCase {
             .compactMap { [weak self] value in
                 guard let self else { return nil }
                 let Limits = type(of: self.metricProvider)
-                return value / Limits.maxValue
+                return value.expressedAsPercentage(ofMinValue: Limits.minValue, maxValue: Limits.maxValue)
             }
             .eraseToAnyPublisher()
     }()

@@ -42,6 +42,30 @@ final class CommonTests: XCTestCase {
         XCTAssertEqual(collection, [5, 6, 1, 2, 1, 2])
     }
     
+    func testFloatExpressedAsPercentage() {
+        let zeroToOneRange = Float(0.0)...Float(1.0)
+    
+        XCTAssertEqual(Float(0.5), Float(0.5).expressedAsPercentage(ofMinValue: zeroToOneRange.lowerBound, maxValue: zeroToOneRange.upperBound))
+        XCTAssertEqual(Float(0.0), Float(0.0).expressedAsPercentage(ofMinValue: zeroToOneRange.lowerBound, maxValue: zeroToOneRange.upperBound))
+        XCTAssertEqual(Float(1.0), Float(1.0).expressedAsPercentage(ofMinValue: zeroToOneRange.lowerBound, maxValue: zeroToOneRange.upperBound))
+        XCTAssertEqual(Float(-2.0), Float(-2.0).expressedAsPercentage(ofMinValue: zeroToOneRange.lowerBound, maxValue: zeroToOneRange.upperBound))
+        XCTAssertEqual(Float(3.0), Float(3.0).expressedAsPercentage(ofMinValue: zeroToOneRange.lowerBound, maxValue: zeroToOneRange.upperBound))
+        
+        let minusTenToTenRange = Float(-10)...Float(10)
+        XCTAssertEqual(Float(0.5), Float(0.0).expressedAsPercentage(ofMinValue: minusTenToTenRange.lowerBound, maxValue: minusTenToTenRange.upperBound))
+        XCTAssertEqual(Float(0.0), Float(-10).expressedAsPercentage(ofMinValue: minusTenToTenRange.lowerBound, maxValue: minusTenToTenRange.upperBound))
+        XCTAssertEqual(Float(1.0), Float(10).expressedAsPercentage(ofMinValue: minusTenToTenRange.lowerBound, maxValue: minusTenToTenRange.upperBound))
+        XCTAssertEqual(Float(-2.0), Float(-50).expressedAsPercentage(ofMinValue: minusTenToTenRange.lowerBound, maxValue: minusTenToTenRange.upperBound))
+        XCTAssertEqual(Float(3.0), Float(50).expressedAsPercentage(ofMinValue: minusTenToTenRange.lowerBound, maxValue: minusTenToTenRange.upperBound))
+        
+        let minusThreeToMinusOneRange = Float(-3.0)...Float(-1.0)
+        XCTAssertEqual(Float(0.5), Float(-2).expressedAsPercentage(ofMinValue: minusThreeToMinusOneRange.lowerBound, maxValue: minusThreeToMinusOneRange.upperBound))
+        XCTAssertEqual(Float(0.0), Float(-3).expressedAsPercentage(ofMinValue: minusThreeToMinusOneRange.lowerBound, maxValue: minusThreeToMinusOneRange.upperBound))
+        XCTAssertEqual(Float(1.0), Float(-1).expressedAsPercentage(ofMinValue: minusThreeToMinusOneRange.lowerBound, maxValue: minusThreeToMinusOneRange.upperBound))
+        XCTAssertEqual(Float(-2.0), Float(-7).expressedAsPercentage(ofMinValue: minusThreeToMinusOneRange.lowerBound, maxValue: minusThreeToMinusOneRange.upperBound))
+        XCTAssertEqual(Float(3.0), Float(3).expressedAsPercentage(ofMinValue: minusThreeToMinusOneRange.lowerBound, maxValue: minusThreeToMinusOneRange.upperBound))
+    }
+    
     func testMetricThresholdRangeMappingToState() {
         let provider = SingleValueMetricProvider(min: -1.0, current: 0.0, max: 1.0)
         let Limits = type(of: provider).self
