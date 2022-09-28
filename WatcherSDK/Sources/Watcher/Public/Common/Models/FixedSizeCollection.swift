@@ -81,3 +81,5 @@ extension FixedSizeCollection: Collection, ExpressibleByArrayLiteral {
         return poppedElements
     }
 }
+
+extension FixedSizeCollection: Equatable where Element: Equatable {}
