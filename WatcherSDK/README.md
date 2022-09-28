@@ -226,3 +226,8 @@ Each Manager holds a few variables;
 This package is available as a Swift Package
 
 To install it, simply drag & drop it into your project
+
+## Package shortcomings
+
+The package currently only supports iOS. For the CPU & Memory metric providers, supporting MacOS for instance would not be an issue.
+The battery metric provider however relies on `UIDevice`. MacOS support could be added by providing an OS-specific implementation by using the `#if canImport(UIKit)` or `#if canImport(IOKit.ps)` directive.
