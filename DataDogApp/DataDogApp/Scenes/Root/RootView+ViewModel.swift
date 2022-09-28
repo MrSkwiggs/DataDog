@@ -33,6 +33,7 @@ extension RootView {
                     case .events:
                         self.unseenEventNumberSubscriber?.cancel()
                         self.appManager.markAllEventsAsSeen()
+                        self.newEventsCount = 0
                     }
                 }
                 .store(in: &subscriptions)
