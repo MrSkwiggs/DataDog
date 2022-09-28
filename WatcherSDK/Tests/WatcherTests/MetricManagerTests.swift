@@ -41,7 +41,6 @@ final class MetricManagerTests: XCTestCase {
         manager
             .publisher
             .sink { value in
-                print(value)
                 XCTAssertEqual(value, valuesOverTime.removeFirst())
                 if valuesOverTime.isEmpty { expectation.fulfill() }
             }
