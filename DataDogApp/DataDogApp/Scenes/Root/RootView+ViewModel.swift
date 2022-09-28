@@ -12,6 +12,7 @@ import Watcher
 extension RootView {
     class ViewModel: ObservableObject {
         private var subscriptions: [AnyCancellable] = []
+        private var unseenEventNumberSubscriber: AnyCancellable?
         private var appManager: AppManagerUseCase
         
         init(appManager: AppManagerUseCase) {
@@ -21,30 +22,30 @@ extension RootView {
         }
         
         private func setupSubscriptions() {
-            appManager
-                .unseenEventsNumberPublisher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] count in
-                    guard let self else { return }
-                    guard self.selectedTab != .events else {
-                        self.appManager.markAllEventsAsSeen()
-                        self.newEventsCount = 0
-                        return
-                    }
-                    self.newEventsCount = count
-                }
-                .store(in: &subscriptions)
+            unseenEventNumberSubscriber = getUnseenEventsNumberSubscriber()
             
             $selectedTab
                 .removeDuplicates()
                 .sink { tab in
                     switch tab {
-                    case .metrics: break
+                    case .metrics:
+                        self.unseenEventNumberSubscriber = self.getUnseenEventsNumberSubscriber()
                     case .events:
+                        self.unseenEventNumberSubscriber?.cancel()
                         self.appManager.markAllEventsAsSeen()
                     }
                 }
                 .store(in: &subscriptions)
+        }
+        
+        private func getUnseenEventsNumberSubscriber() -> AnyCancellable {
+            appManager
+                .unseenEventsNumberPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] count in
+                    guard let self else { return }
+                    self.newEventsCount = count
+                }
         }
         
         @Published
