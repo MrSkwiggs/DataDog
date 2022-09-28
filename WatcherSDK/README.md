@@ -129,11 +129,11 @@ That's it, now the Watcher will occasionally fetch & publish system status metri
 
 ### Journaling
 
-The Watcher also offers an `eventProvider` instance. Whenever a metric crosses its threshold, it notifies listeners through emitting `MetricThresholdState` events.
+The Watcher also offers an `eventProvider` instance. Whenever a metric crosses its threshold, it notifies listeners through emitting [`MetricThresholdState`](Sources/Watcher/Public/Common/Models/MetricThresholdState.swift) events.
 
-The `EventProvider` listens to these, and republishes them as `MetricThresholdEvents`, with a full date & time, metric state (critical or nominal), metric value & percentage, as well as which metric generated the event (cpu, memory or battery).
+The [`EventProvider`](Sources/Watcher/Public/Common/Implementations/EventProvider.swift) listens to these, and republishes them as [`MetricThresholdEvents`](Sources/Watcher/Public/Common/Models/MetricThresholdEvent.swift), with a full date & time, metric state (critical or nominal), metric value & percentage, as well as which metric generated the event (cpu, memory or battery).
 
-You can use & subscribe to the `EventProvider` to journalise all such events in convenient manner.
+You can use & subscribe to the [`EventProvider`](Sources/Watcher/Public/Common/Implementations/EventProvider.swift) to journalise all such events in convenient manner.
 
 By default, the `Watcher.eventProvider` instance publishes events for all 3 metric managers. You can however instantiate your own event provider if you so desire, and only register a single metric manager. For example, you could just listen to battery level events like so:
 
@@ -148,7 +148,7 @@ batteryEventProvider.register(watcher.batteryLevelManager, for: .battery)
 
 Watcher is easy to use in your SwiftUI apps and makes it possible to write tests; all types conform to & use public protocols.
 
-The Watcher's metric managers all conform to `MetricManagerUseCase`, and they themselves rely on `MetricProviderUseCase`.
+The Watcher's metric managers all conform to [`MetricManagerUseCase`](Sources/Watcher/Public/Common/UseCases/MetricManagerUseCase.swift), and they themselves rely on [`MetricProviderUseCase`](Sources/Watcher/Public/Common/UseCases/MetricProviderUseCase.swift).
 
 It is therefore very easy to write mocks and have complete control over the values emitted, making it easy to test edge cases in your SwiftUI Previews.
 
@@ -182,9 +182,8 @@ Then use this with a regular `MetricManager`:
 ```swift
 let noisyManager = MetricManager(metricProvider: NoisyMetricProvider(),
                                  threshold: 0.5,
-                                 refreshFrequency: refreshFrequency,
-                                 queue: .init(label: UUID().uuidString,
-                                              qos: .background))
+                                 refreshFrequency: 1,
+                                 queue: .global())
 ```
 
 Or event write a mock implementation of the `MetricManagerUseCase` itself (which is a bit more involved, but still very manageable).
