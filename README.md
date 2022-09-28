@@ -3,7 +3,7 @@
 My assignment for the position of Sr. iOS Engineer at DataDog
 
 The app is built using `Swift`, `SwiftUI` & `Combine`.
-It relies on a SDK for providing system metrics. Documentation for this SDK [can be found here](/WatcherSDK/README.md)
+It relies on a SDK for providing system metrics. Documentation for this SDK [can be found here](/WatcherSDK)
 
 ## Architecture
 
