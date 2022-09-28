@@ -199,24 +199,30 @@ By default, the battery threshold is _inversed_; that is, valid battery levels a
 
 For CPU & Memory load, the threshold are used in the more standard way where, if the values reach & go beyond it, then they are considered critical. Anything _below_ the threshold will be considered nominal.
 
-### MetricManager(UseCase)
+### MetricThresholdRange
 
-The watcher instance holds metric managers;
+To express this, the [`MetricThresholdRange`](Sources/Watcher/Public/Common/Models/MetricThresholdRange.swift) is used. It represents how a metric should treat the range of valid values with regards to its threshold. It can be one of two values;
+
+- `.lower`: The default representation considers the `lower` range of values as valid (that is, values numerically _below_ the threshold). Therefore, `MetricThresholdState.critical` events are emitted when the metric increases, and goes numerically _above_ its threshold.
+- `.upper`: Inversely, the `upper` representation treats values as valid if they are numerically _above_ the threshold. That is, `MetricThresholdState.critical` events are emitted when the metric decreases, and goes numerically _below_ its threshold.
+
+### Watcher
+
+The [`Watcher`](Sources/Watcher/Watcher.swift) instance holds 3 metric managers, as well as an [`EventProvider`](Sources/Watcher/Public/Common/Implementations/EventProvider.swift)
 
 - `watcher.cpuLoadManager`: The CPU Load manager, which reports total CPU usage and events related to the CPU load.
   It publishes this as a relative value (a percentage of its alotted performance) between `0.0` & `1.0`.
 - `watcher.memoryLoadManager`: The Memory Load manager, which reports total system RAM usage in Mb.
 - `watcher.batteryLevelManager`: The Battery Level manager, which reports device battery level, as a percentage of the current battery capacity.
 
-Each Manager holds a few variables;
+### MetricManager(UseCase)
+
+Each [`MetricManager`](Sources/Watcher/Public/Common/Implementations/MetricManager.swift) holds a few variables;
 
 - `publisher`: The main value publisher. For the CPU Manager, emits the relative usage in %, for the Memory Manager, emits the amount of used system RAM in Mb and for the Battery Manager, emits the remaining battery percentage.
 - `percentPublisher`: The manager's value publisher, but expressed as a percentage of its min & max values. For the CPU & Battery manager, this is the same value as emitted by `publisher`, but for the Memory Manager, this returns the current memory use as a percentage of the max RAM on the device.
 - `threshold` & `thresholdPublisher`: The threshold value & its publisher. The threshold is set when you create the `Watcher` instance, but it can also be modified later down the road. Use the publisher to subscribe to updates.
 - `thresholdRange` & `thresholdRangePublisher`: The manager's threshold range, and its publisher.
-  A `ThresholdRange` represents how a metric should treat the range of valid values with regards to its threshold. It can be one of two values;
-  - `.lower`: The default representation considers the `lower` range of values as valid (that is, values numerically _below_ the threshold). Therefore, `MetricThresholdState.critical` events are emitted when the metric increases, and goes numerically _above_ its threshold.
-  - `.upper`: Inversely, the `upper` representation treats values as valid if they are numerically _above_ the threshold. That is, `MetricThresholdState.critical` events are emitted when the metric decreases, and goes numerically _below_ its threshold.
 - `thresholdStatePublisher`: Whenever the metric crosses its threshold (in either direction), this publisher emits a `MetricThresholdState` value.
   These also hold the metric value (and percentage) of when it happened.
 - `refreshFrequency` & `refreshFrequencyPublisher`: How often this manager publishes its metric's value, in seconds. Subscribe to the publisher to be notified of changes.
