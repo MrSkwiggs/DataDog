@@ -47,10 +47,13 @@ struct ThresholdEditor: View {
                 }
                 Spacer()
             }
+            
+            Spacer()
+            
             HStack {
                 Spacer()
                 Text("\(threshold * 100, specifier: "%1.0f")%")
-                    .font(.largeTitle)
+                    .font(.system(size: 48))
                     .bold()
                 Spacer()
             }
